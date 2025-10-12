@@ -1,8 +1,13 @@
-import { useForm } from "react-hook-form";
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
-import Swal from "sweetalert2";
-import bcrypt from "bcryptjs";
+import { useNavigate } from "react-router-dom";
 
+// Packages
+import bcrypt from "bcryptjs";
+import Swal from "sweetalert2";
+import { useForm } from "react-hook-form";
+
+// Icons
 import {
   FaUser,
   FaPhoneAlt,
@@ -11,10 +16,20 @@ import {
   FaEye,
   FaEyeSlash,
 } from "react-icons/fa";
+
+// Hooks
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 const SignUp = () => {
   const axiosPublic = useAxiosPublic();
+
+  // Navigation
+  const navigate = useNavigate();
+
+  // Loading State
+  const [loading, setLoading] = useState(false);
+
+  // Form State
   const {
     register,
     handleSubmit,
@@ -23,65 +38,86 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
 
-  // eslint-disable-next-line no-unused-vars
+  // Watch password and confirmPassword
   const password = watch("password");
-  // eslint-disable-next-line no-unused-vars
   const confirmPassword = watch("confirmPassword");
 
   // Visibility toggles
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  // Handle submit
+  // Handle form submission for SignUp
   const onSubmit = async (data) => {
+    setLoading(true); // Start loading
+
     const { name, phone, password, confirmPassword } = data;
 
+    // Check if password and confirmPassword match
     if (password !== confirmPassword) {
+      setLoading(false); // stop loading
       Swal.fire({
         icon: "warning",
-        title: "Password Mismatch",
-        text: "Your passwords do not match. Please recheck and try again.",
+        title: "পাসওয়ার্ড মিলছে না",
+        text: "আপনার পাসওয়ার্ড সঠিক কিনা পরীক্ষা করুন।",
         confirmButtonColor: "#6366F1",
       });
-      return;
+      return; // stop execution
     }
 
     try {
-      // Hash the password before sending
-      const salt = bcrypt.genSaltSync(10); // 10 rounds
+      // Hash the password before sending to server
+      const salt = bcrypt.genSaltSync(10);
       const hashedPassword = bcrypt.hashSync(password, salt);
 
+      // Send registration request
       const res = await axiosPublic.post("/users", {
         name,
         phone,
-        password: hashedPassword, // send hashed password
+        password: hashedPassword,
       });
 
+      // If registration successful
       if (res.data?.id) {
+        // Save user in localStorage with expiry (30 minutes)
+        const expiryTime = new Date().getTime() + 1000 * 60 * 30;
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            phone,
+            expiry: expiryTime,
+          })
+        );
+
         Swal.fire({
           icon: "success",
-          title: "Account Created!",
-          text: "Your account has been successfully created.",
+          title: "অ্যাকাউন্ট তৈরি হয়েছে!",
+          text: "আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।",
           confirmButtonColor: "#6366F1",
         });
-        reset();
+
+        reset(); // Reset form fields
+        navigate("/Dashboard"); // Redirect to dashboard
       } else {
+        // If server returns failure
         Swal.fire({
           icon: "error",
-          title: "Registration Failed",
-          text: res.data?.message || "Please try again later.",
+          title: "নিবন্ধন ব্যর্থ",
+          text: res.data?.message || "দয়া করে পরে চেষ্টা করুন।",
           confirmButtonColor: "#6366F1",
         });
       }
     } catch (error) {
+      // Handle network/server errors
       Swal.fire({
         icon: "error",
-        title: "Server Error",
+        title: "সার্ভার ত্রুটি",
         text:
           error.response?.data?.message ||
-          "Could not connect to server. Try again.",
+          "সার্ভারের সাথে সংযোগ করা যায়নি। পরে আবার চেষ্টা করুন।",
         confirmButtonColor: "#6366F1",
       });
+    } finally {
+      setLoading(false); // Stop loading in all cases
     }
   };
 
@@ -208,9 +244,16 @@ const SignUp = () => {
           {/* Submit */}
           <button
             type="submit"
-            className="flex items-center justify-center w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl text-white font-semibold shadow-md hover:translate-y-[-2px] hover:shadow-xl transition-all mb-4 cursor-pointer "
+            disabled={loading}
+            className="flex items-center justify-center w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl text-white font-semibold shadow-md hover:translate-y-[-2px] hover:shadow-xl transition-all mb-4 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <FaUserPlus className="mr-2" /> নিবন্ধন করুন
+            {loading ? (
+              "নিবন্ধন চলছে..."
+            ) : (
+              <>
+                <FaUserPlus className="mr-2" /> নিবন্ধন করুন
+              </>
+            )}
           </button>
         </form>
 
