@@ -1,27 +1,98 @@
+import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { FaUser, FaPhoneAlt, FaLock, FaUserPlus } from "react-icons/fa";
+import Swal from "sweetalert2";
+import bcrypt from "bcryptjs";
+
+import {
+  FaUser,
+  FaPhoneAlt,
+  FaLock,
+  FaUserPlus,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 const SignUp = () => {
-  const [fullName, setFullName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const axiosPublic = useAxiosPublic();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm();
 
-  const handleSignUp = () => {
-    // Add your registration logic here
-    console.log("Full Name:", fullName);
-    console.log("Phone:", phone);
-    console.log("Password:", password);
-    console.log("Confirm Password:", confirmPassword);
+  // eslint-disable-next-line no-unused-vars
+  const password = watch("password");
+  // eslint-disable-next-line no-unused-vars
+  const confirmPassword = watch("confirmPassword");
+
+  // Visibility toggles
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  // Handle submit
+  const onSubmit = async (data) => {
+    const { name, phone, password, confirmPassword } = data;
+
+    if (password !== confirmPassword) {
+      Swal.fire({
+        icon: "warning",
+        title: "Password Mismatch",
+        text: "Your passwords do not match. Please recheck and try again.",
+        confirmButtonColor: "#6366F1",
+      });
+      return;
+    }
+
+    try {
+      // Hash the password before sending
+      const salt = bcrypt.genSaltSync(10); // 10 rounds
+      const hashedPassword = bcrypt.hashSync(password, salt);
+
+      const res = await axiosPublic.post("/users", {
+        name,
+        phone,
+        password: hashedPassword, // send hashed password
+      });
+
+      if (res.data?.id) {
+        Swal.fire({
+          icon: "success",
+          title: "Account Created!",
+          text: "Your account has been successfully created.",
+          confirmButtonColor: "#6366F1",
+        });
+        reset();
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Registration Failed",
+          text: res.data?.message || "Please try again later.",
+          confirmButtonColor: "#6366F1",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Server Error",
+        text:
+          error.response?.data?.message ||
+          "Could not connect to server. Try again.",
+        confirmButtonColor: "#6366F1",
+      });
+    }
   };
 
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 overflow-hidden">
-      {/* Background soft circles */}
-      <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-indigo-500/40 rounded-full blur-[120px]"></div>
-      <div className="absolute bottom-[-100px] right-[-100px] w-[400px] h-[400px] bg-indigo-500/40 rounded-full blur-[120px]"></div>
+      {/* Background lighting */}
+      <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-indigo-500/40 rounded-full blur-[120px]" />
+      <div className="absolute bottom-[-100px] right-[-100px] w-[400px] h-[400px] bg-indigo-500/40 rounded-full blur-[120px]" />
 
       <div className="z-10 w-full max-w-md p-6 backdrop-blur-md bg-white/5 rounded-2xl border border-white/10 shadow-lg flex flex-col items-center animate-fadeIn">
+        {/* Logo */}
         <div className="mb-4">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/0/04/World_Bank_logo.svg"
@@ -37,61 +108,111 @@ const SignUp = () => {
           কমিউনিটিতে যোগ দিন
         </p>
 
-        {/* Full Name */}
-        <div className="flex items-center bg-white/10 rounded-xl p-3 mb-4 focus-within:ring-2 focus-within:ring-indigo-500 transition-all w-full">
-          <FaUser className="text-slate-400 mr-3" />
-          <input
-            type="text"
-            placeholder="আপনার পুরো নাম লিখুন"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            className="bg-transparent outline-none text-white w-full placeholder-slate-400"
-          />
-        </div>
-
-        {/* Phone */}
-        <div className="flex items-center bg-white/10 rounded-xl p-3 mb-4 focus-within:ring-2 focus-within:ring-indigo-500 transition-all w-full">
-          <FaPhoneAlt className="text-slate-400 mr-3" />
-          <input
-            type="text"
-            placeholder="আপনার ফোন নম্বর লিখুন"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="bg-transparent outline-none text-white w-full placeholder-slate-400"
-          />
-        </div>
-
-        {/* Password */}
-        <div className="flex items-center bg-white/10 rounded-xl p-3 mb-4 focus-within:ring-2 focus-within:ring-indigo-500 transition-all w-full">
-          <FaLock className="text-slate-400 mr-3" />
-          <input
-            type="password"
-            placeholder="একটি শক্তিশালী পাসওয়ার্ড তৈরি করুন"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="bg-transparent outline-none text-white w-full placeholder-slate-400"
-          />
-        </div>
-
-        {/* Confirm Password */}
-        <div className="flex items-center bg-white/10 rounded-xl p-3 mb-6 focus-within:ring-2 focus-within:ring-indigo-500 transition-all w-full">
-          <FaLock className="text-slate-400 mr-3" />
-          <input
-            type="password"
-            placeholder="আপনার পাসওয়ার্ড আবার লিখুন"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="bg-transparent outline-none text-white w-full placeholder-slate-400"
-          />
-        </div>
-
-        {/* Sign Up Button */}
-        <button
-          onClick={handleSignUp}
-          className="flex items-center justify-center w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl text-white font-semibold shadow-md hover:translate-y-[-2px] hover:shadow-xl transition-all mb-4"
+        {/* Form */}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full flex flex-col items-center"
         >
-          <FaUserPlus className="mr-2" /> নিবন্ধন করুন
-        </button>
+          {/* Full Name */}
+          <div className="flex items-center bg-white/10 rounded-xl p-3 mb-4 w-full focus-within:ring-2 focus-within:ring-indigo-500">
+            <FaUser className="text-slate-400 mr-3" />
+            <input
+              type="text"
+              placeholder="আপনার পুরো নাম লিখুন"
+              {...register("name", { required: "Name is required" })}
+              className="bg-transparent outline-none text-white w-full placeholder-slate-400"
+            />
+          </div>
+          {errors.name && (
+            <p className="text-red-400 text-sm -mt-3 mb-2">
+              {errors.name.message}
+            </p>
+          )}
+
+          {/* Phone */}
+          <div className="flex items-center bg-white/10 rounded-xl p-3 mb-4 w-full focus-within:ring-2 focus-within:ring-indigo-500">
+            <FaPhoneAlt className="text-slate-400 mr-3" />
+            <input
+              type="text"
+              placeholder="আপনার ফোন নম্বর লিখুন"
+              {...register("phone", {
+                required: "Phone number is required",
+                pattern: {
+                  value: /^[0-9]{11}$/,
+                  message: "Enter a valid 11-digit phone number",
+                },
+              })}
+              className="bg-transparent outline-none text-white w-full placeholder-slate-400"
+            />
+          </div>
+          {errors.phone && (
+            <p className="text-red-400 text-sm -mt-3 mb-2">
+              {errors.phone.message}
+            </p>
+          )}
+
+          {/* Password */}
+          <div className="relative flex items-center bg-white/10 rounded-xl p-3 mb-4 w-full focus-within:ring-2 focus-within:ring-indigo-500">
+            <FaLock className="text-slate-400 mr-3" />
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="একটি শক্তিশালী পাসওয়ার্ড তৈরি করুন"
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters",
+                },
+              })}
+              className="bg-transparent outline-none text-white w-full placeholder-slate-400 pr-8"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 text-slate-400 hover:text-white transition"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+          {errors.password && (
+            <p className="text-red-400 text-sm -mt-3 mb-2">
+              {errors.password.message}
+            </p>
+          )}
+
+          {/* Confirm Password */}
+          <div className="relative flex items-center bg-white/10 rounded-xl p-3 mb-6 w-full focus-within:ring-2 focus-within:ring-indigo-500">
+            <FaLock className="text-slate-400 mr-3" />
+            <input
+              type={showConfirm ? "text" : "password"}
+              placeholder="আপনার পাসওয়ার্ড আবার লিখুন"
+              {...register("confirmPassword", {
+                required: "Please confirm your password",
+              })}
+              className="bg-transparent outline-none text-white w-full placeholder-slate-400 pr-8"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirm(!showConfirm)}
+              className="absolute right-3 text-slate-400 hover:text-white transition"
+            >
+              {showConfirm ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+          {errors.confirmPassword && (
+            <p className="text-red-400 text-sm -mt-3 mb-2">
+              {errors.confirmPassword.message}
+            </p>
+          )}
+
+          {/* Submit */}
+          <button
+            type="submit"
+            className="flex items-center justify-center w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl text-white font-semibold shadow-md hover:translate-y-[-2px] hover:shadow-xl transition-all mb-4 cursor-pointer "
+          >
+            <FaUserPlus className="mr-2" /> নিবন্ধন করুন
+          </button>
+        </form>
 
         <p className="text-slate-300 text-sm">
           ইতিমধ্যেই একটি অ্যাকাউন্ট আছে?{" "}
@@ -101,16 +222,14 @@ const SignUp = () => {
         </p>
       </div>
 
-      {/* Fade-in animation */}
+      {/* Fade animation */}
       <style>
         {`
           @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
           }
-          .animate-fadeIn {
-            animation: fadeIn 1s ease;
-          }
+          .animate-fadeIn { animation: fadeIn 1s ease; }
         `}
       </style>
     </div>
