@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import {
   FaPhoneAlt,
   FaLock,
-  FaSignInAlt,
   FaEye,
   FaEyeSlash,
 } from "react-icons/fa";

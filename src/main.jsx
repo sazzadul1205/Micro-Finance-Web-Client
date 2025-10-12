@@ -9,12 +9,14 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Pages
-import Login from "./Pages/Login";
-import SignUp from "./Pages/SignUp";
+import Login from "./Pages/Auth/Login";
+import SignUp from "./Pages/Auth/SignUp";
 import Dashboard from "./Pages/Dashboard";
+import 
 
 // Routes
 import PrivateRoute from "./Routes/PrivateRoute";
+import MainLayout from "./Layout/MainLayout";
 
 // React Query
 const queryClient = new QueryClient();
@@ -29,14 +31,17 @@ createRoot(document.getElementById("root")).render(
           <Route path="/Login" element={<Login />} />
 
           <Route path="/SignUp" element={<SignUp />} />
-          <Route
-            path="/Dashboard"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
+
+          <Route element={<MainLayout />}>
+            <Route
+              path="/Dashboard"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
+          </Route>
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
