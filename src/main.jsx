@@ -18,7 +18,8 @@ import MainLayout from "./Layout/MainLayout";
 // Routes
 import PrivateRoute from "./Routes/PrivateRoute";
 import PersonalInfo from "./Pages/Users/PersonalInfo";
-import NomaneeInfo from "./Pages/Users/NomaneeInfo";
+import NomineeInfo from "./Pages/Users/NomineeInfo";
+import BankInfo from "./Pages/Users/BankInfo";
 
 // React Query
 const queryClient = new QueryClient();
@@ -52,10 +53,19 @@ createRoot(document.getElementById("root")).render(
             />
 
             <Route
-              path="/NomaneeInfo"
+              path="/NomineeInfo"
               element={
                 <PrivateRoute>
-                  <NomaneeInfo />
+                  <NomineeInfo />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/BankInfo"
+              element={
+                <PrivateRoute>
+                  <BankInfo />
                 </PrivateRoute>
               }
             />

@@ -173,7 +173,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center justify-center w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl text-white font-semibold shadow-md hover:translate-y-[-2px] hover:shadow-xl transition-all mb-4 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex items-center justify-center w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl text-white font-semibold shadow-md hover:translate-y-[-2px] hover:shadow-xl transition-all mb-4 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
           >
             {loading ? "প্রবেশ চলছে..." : "সাইন ইন করুন"}
           </button>
