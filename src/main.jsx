@@ -20,6 +20,7 @@ import PrivateRoute from "./Routes/PrivateRoute";
 import PersonalInfo from "./Pages/Users/PersonalInfo";
 import NomineeInfo from "./Pages/Users/NomineeInfo";
 import BankInfo from "./Pages/Users/BankInfo";
+import Loans from "./Pages/Users/Loans";
 
 // React Query
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ createRoot(document.getElementById("root")).render(
               }
             />
 
+            {/* Nominee Information Route */}
             <Route
               path="/NomineeInfo"
               element={
@@ -61,11 +63,22 @@ createRoot(document.getElementById("root")).render(
               }
             />
 
+            {/* Bank Information Route */}
             <Route
               path="/BankInfo"
               element={
                 <PrivateRoute>
                   <BankInfo />
+                </PrivateRoute>
+              }
+            />
+
+            {/* Loans Route */}
+            <Route
+              path="/Loans"
+              element={
+                <PrivateRoute>
+                  <Loans />
                 </PrivateRoute>
               }
             />

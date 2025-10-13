@@ -157,7 +157,7 @@ const NomineeInfo = () => {
 
   return (
     <div className="mx-auto max-w-4xl shadow-2xl rounded-md p-4">
-      <div className="py-4">
+      <div className="py-4 rounded-2xl my-4">
         {/* Header */}
         <div className="flex items-center gap-4 bg-blue-500 py-3 px-5 rounded-2xl text-white">
           <FaUser className="text-3xl" />

@@ -44,12 +44,10 @@ const TextInput = ({
             required={required}
             {...(register ? register(id, validation) : {})}
             {...rest}
-            defaultValue="" // set placeholder as default
             className={`block w-full ${Icon ? "pl-10" : "pl-3"} border ${
               error ? "border-red-500" : "border-gray-300"
-            } rounded-md shadow-sm py-2 pr-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+            } rounded-md shadow-sm py-3 pr-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
           >
-            {/* optional placeholder option */}
             {selectPlaceholder && (
               <option value="" disabled>
                 {selectPlaceholder}
@@ -72,7 +70,7 @@ const TextInput = ({
             {...rest}
             className={`block w-full ${Icon ? "pl-10" : "pl-3"} border ${
               error ? "border-red-500" : "border-gray-300"
-            } rounded-md shadow-sm py-2 pr-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+            } rounded-md shadow-sm py-3 pr-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
           ></textarea>
         ) : (
           <input
@@ -84,7 +82,7 @@ const TextInput = ({
             {...rest}
             className={`block w-full ${Icon ? "pl-10" : "pl-3"} pr-3 border ${
               error ? "border-red-500" : "border-gray-300"
-            } rounded-md shadow-sm py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+            } rounded-md shadow-sm py-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
           />
         )}
       </div>

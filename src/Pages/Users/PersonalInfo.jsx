@@ -159,7 +159,7 @@ const PersonalInfo = () => {
 
   return (
     <div className="mx-auto max-w-4xl shadow-2xl rounded-md p-4">
-      <div className="py-4">
+      <div className="py-4 rounded-2xl my-4">
         {/* Header */}
         <div className="flex items-center gap-4">
           <img src={Loan} alt="Loan Icon" className="w-15" />
