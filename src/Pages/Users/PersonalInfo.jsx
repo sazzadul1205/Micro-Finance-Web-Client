@@ -1,3 +1,7 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+// Icons
 import {
   FaBriefcase,
   FaFemale,
@@ -10,16 +14,23 @@ import {
   FaUserCircle,
   FaUserTie,
 } from "react-icons/fa";
-import Loan from "../../assets/PersonalInfo/Loan.png";
-import TextInput from "../../Shared/TextInput";
-import { useForm } from "react-hook-form";
-import FileUploadCard from "../../Shared/FileUploadCard";
-import SignaturePad from "../../Shared/SignaturePad";
-import { useState } from "react";
+
+// Packages
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useForm } from "react-hook-form";
+import { useQuery } from "@tanstack/react-query";
+
+// Assets
+import Loan from "../../assets/PersonalInfo/Loan.png";
+
+// Shared
+import TextInput from "../../Shared/TextInput";
+import SignaturePad from "../../Shared/SignaturePad";
+import FileUploadCard from "../../Shared/FileUploadCard";
+
+// Hooks
 import useAxiosPublic from "../../../Hooks/useAxiosPublic";
-import { useNavigate } from "react-router-dom";
 
 const Image_Hosting_Key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const Image_Hosting_API = `https://api.imgbb.com/1/upload?key=${Image_Hosting_Key}`;
@@ -38,11 +49,26 @@ const PersonalInfo = () => {
     formState: { errors },
   } = useForm();
 
-  const [nidFront, setNidFront] = useState([]);
   const [nidBack, setNidBack] = useState([]);
-  const [passportPhoto, setPassportPhoto] = useState([]);
-  const [signature, setSignature] = useState(null); // Blob
+  const [nidFront, setNidFront] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [signature, setSignature] = useState(null);
+  const [passportPhoto, setPassportPhoto] = useState([]);
+
+  const { data: UserBasicInfoExistCheck, isLoading } = useQuery({
+    queryKey: ["UserBasicInfoExistsCheck", user?.phone],
+    queryFn: () =>
+      axiosPublic
+        .get(`/Users/UserBasicInfoExistCheck/${user?.phone}`)
+        .then((res) => res.data),
+    enabled: !!user?.phone, // only run if phone exists
+  });
+
+  useEffect(() => {
+    if (!isLoading && UserBasicInfoExistCheck?.basicInfoSubmitted) {
+      navigate("/NomaneeInfo"); // redirect if basic info already submitted
+    }
+  }, [UserBasicInfoExistCheck, isLoading, navigate]);
 
   const uploadToImgBB = async (file) => {
     const formData = new FormData();
@@ -63,6 +89,7 @@ const PersonalInfo = () => {
     }
   };
 
+  // On Submit Handler
   const onSubmit = async (data) => {
     // Check if user is logged in
     if (!user?.phone) {
@@ -118,7 +145,7 @@ const PersonalInfo = () => {
       });
     } finally {
       setLoading(false);
-      navigate
+      navigate("/NomaneeInfo");
     }
   };
 

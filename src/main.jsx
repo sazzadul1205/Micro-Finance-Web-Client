@@ -11,7 +11,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // Pages
 import Login from "./Pages/Auth/Login";
 import SignUp from "./Pages/Auth/SignUp";
-import Dashboard from "./Pages/Dashboard";
 
 // Layout
 import MainLayout from "./Layout/MainLayout";
@@ -19,6 +18,7 @@ import MainLayout from "./Layout/MainLayout";
 // Routes
 import PrivateRoute from "./Routes/PrivateRoute";
 import PersonalInfo from "./Pages/Users/PersonalInfo";
+import NomaneeInfo from "./Pages/Users/NomaneeInfo";
 
 // React Query
 const queryClient = new QueryClient();
@@ -52,10 +52,10 @@ createRoot(document.getElementById("root")).render(
             />
 
             <Route
-              path="/Dashboard"
+              path="/NomaneeInfo"
               element={
                 <PrivateRoute>
-                  <Dashboard />
+                  <NomaneeInfo />
                 </PrivateRoute>
               }
             />
