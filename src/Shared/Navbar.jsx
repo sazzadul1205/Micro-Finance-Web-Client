@@ -1,13 +1,38 @@
+import { useNavigate } from "react-router-dom";
+
+// Packages
+import Swal from "sweetalert2";
+
 const Navbar = () => {
+  // Hooks
+  const navigate = useNavigate();
+
+  // Logout Handler
   const handleLogout = () => {
-    // Remove user from localStorage
-    localStorage.removeItem("user");
+    Swal.fire({
+      title: "আপনি কি লগ আউট করতে চান?",
+      text: "লগ আউট করলে আবার লগইন করতে হবে!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#6366F1",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "হ্যাঁ, লগ আউট করুন",
+      cancelButtonText: "বাতিল",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("user");
 
-    // Optionally, show a message
-    alert("আপনি লগ আউট করেছেন!");
-
-    // Redirect to login page
-    window.location.href = "/Login";
+        Swal.fire({
+          title: "লগ আউট সম্পন্ন!",
+          text: "আপনি সফলভাবে লগ আউট করেছেন।",
+          icon: "success",
+          confirmButtonColor: "#6366F1",
+          confirmButtonText: "ঠিক আছে",
+        }).then(() => {
+          navigate("/Login");
+        });
+      }
+    });
   };
 
   return (

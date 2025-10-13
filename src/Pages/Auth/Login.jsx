@@ -5,21 +5,13 @@ import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 
 // Icons
-import {
-  FaPhoneAlt,
-  FaLock,
-  FaEye,
-  FaEyeSlash,
-} from "react-icons/fa";
+import { FaPhoneAlt, FaLock } from "react-icons/fa";
 
 // Hooks
-import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 
 const Login = () => {
   const axiosPublic = useAxiosPublic();
-
-  // Visibility toggles
-  const [showPassword, setShowPassword] = useState(false);
 
   // Inside your component
   const [loading, setLoading] = useState(false);
@@ -74,7 +66,7 @@ const Login = () => {
           confirmButtonColor: "#6366F1",
         }).then(() => {
           setLoading(false); // stop loading before redirect
-          window.location.href = "/Dashboard";
+          window.location.href = "/PersonalInfo";
         });
       } else {
         // If server returns failure
@@ -118,13 +110,17 @@ const Login = () => {
           আপনার অ্যাকাউন্টে প্রবেশ করতে লগইন করুন
         </p>
 
+        {/* Form */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full flex flex-col items-center"
         >
           {/* Phone */}
           <div className="flex items-center w-full bg-white/10 rounded-xl p-3 mb-4 focus-within:ring-2 focus-within:ring-indigo-500 transition-all">
+            {/* Icon */}
             <FaPhoneAlt className="text-slate-400 mr-3" />
+
+            {/* Input */}
             <input
               type="text"
               placeholder="আপনার ফোন নম্বর লিখুন"
@@ -138,6 +134,8 @@ const Login = () => {
               className="bg-transparent outline-none text-white w-full placeholder-slate-400"
             />
           </div>
+
+          {/* Error message */}
           {errors.phone && (
             <p className="text-red-400 text-sm -mt-3 mb-2">
               {errors.phone.message}
@@ -146,9 +144,12 @@ const Login = () => {
 
           {/* Password */}
           <div className="relative flex items-center w-full bg-white/10 rounded-xl p-3 mb-6 focus-within:ring-2 focus-within:ring-indigo-500 transition-all">
+            {/* Icon */}
             <FaLock className="text-slate-400 mr-3" />
+
+            {/* Input */}
             <input
-              type={showPassword ? "text" : "password"}
+              type="password"
               placeholder="আপনার পাসওয়ার্ড লিখুন"
               {...register("password", {
                 required: "Password is required",
@@ -157,16 +158,11 @@ const Login = () => {
                   message: "Password must be at least 6 characters",
                 },
               })}
-              className="bg-transparent outline-none text-white w-full placeholder-slate-400 pr-8"
+              className="bg-transparent outline-none text-white w-full placeholder-slate-400"
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 text-slate-400 hover:text-white transition"
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </button>
           </div>
+
+          {/* Error message */}
           {errors.password && (
             <p className="text-red-400 text-sm -mt-3 mb-2">
               {errors.password.message}
@@ -176,13 +172,14 @@ const Login = () => {
           {/* Submit */}
           <button
             type="submit"
-            disabled={loading} // disable while loading
+            disabled={loading}
             className="flex items-center justify-center w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl text-white font-semibold shadow-md hover:translate-y-[-2px] hover:shadow-xl transition-all mb-4 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? "প্রবেশ চলছে..." : "সাইন ইন করুন"}
           </button>
         </form>
 
+        {/* Sign up */}
         <p className="text-slate-300 text-sm">
           অ্যাকাউন্ট নেই?{" "}
           <a

@@ -18,7 +18,7 @@ import {
 } from "react-icons/fa";
 
 // Hooks
-import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 
 const SignUp = () => {
   const axiosPublic = useAxiosPublic();
@@ -96,7 +96,7 @@ const SignUp = () => {
         });
 
         reset(); // Reset form fields
-        navigate("/Dashboard"); // Redirect to dashboard
+        navigate("/PersonalInfo"); // Redirect to dashboard
       } else {
         // If server returns failure
         Swal.fire({
@@ -137,9 +137,12 @@ const SignUp = () => {
           />
         </div>
 
+        {/* Title */}
         <h2 className="text-white text-2xl font-bold mb-1">
           নতুন অ্যাকাউন্ট তৈরি করুন
         </h2>
+
+        {/* Tagline */}
         <p className="text-slate-300 text-sm mb-6 text-center">
           কমিউনিটিতে যোগ দিন
         </p>
@@ -151,7 +154,10 @@ const SignUp = () => {
         >
           {/* Full Name */}
           <div className="flex items-center bg-white/10 rounded-xl p-3 mb-4 w-full focus-within:ring-2 focus-within:ring-indigo-500">
+            {/* Icon */}
             <FaUser className="text-slate-400 mr-3" />
+
+            {/* Input */}
             <input
               type="text"
               placeholder="আপনার পুরো নাম লিখুন"
@@ -159,6 +165,8 @@ const SignUp = () => {
               className="bg-transparent outline-none text-white w-full placeholder-slate-400"
             />
           </div>
+
+          {/* Name Error */}
           {errors.name && (
             <p className="text-red-400 text-sm -mt-3 mb-2">
               {errors.name.message}
@@ -167,7 +175,10 @@ const SignUp = () => {
 
           {/* Phone */}
           <div className="flex items-center bg-white/10 rounded-xl p-3 mb-4 w-full focus-within:ring-2 focus-within:ring-indigo-500">
+            {/* Icon */}
             <FaPhoneAlt className="text-slate-400 mr-3" />
+
+            {/* Input */}
             <input
               type="text"
               placeholder="আপনার ফোন নম্বর লিখুন"
@@ -181,6 +192,8 @@ const SignUp = () => {
               className="bg-transparent outline-none text-white w-full placeholder-slate-400"
             />
           </div>
+
+          {/* Phone Error */}
           {errors.phone && (
             <p className="text-red-400 text-sm -mt-3 mb-2">
               {errors.phone.message}
@@ -189,7 +202,10 @@ const SignUp = () => {
 
           {/* Password */}
           <div className="relative flex items-center bg-white/10 rounded-xl p-3 mb-4 w-full focus-within:ring-2 focus-within:ring-indigo-500">
+            {/* Icon */}
             <FaLock className="text-slate-400 mr-3" />
+
+            {/* Input */}
             <input
               type={showPassword ? "text" : "password"}
               placeholder="একটি শক্তিশালী পাসওয়ার্ড তৈরি করুন"
@@ -200,16 +216,11 @@ const SignUp = () => {
                   message: "Password must be at least 6 characters",
                 },
               })}
-              className="bg-transparent outline-none text-white w-full placeholder-slate-400 pr-8"
+              className="bg-transparent outline-none text-white w-full placeholder-slate-400"
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 text-slate-400 hover:text-white transition"
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </button>
           </div>
+
+          {/* Password Error */}
           {errors.password && (
             <p className="text-red-400 text-sm -mt-3 mb-2">
               {errors.password.message}
@@ -218,23 +229,21 @@ const SignUp = () => {
 
           {/* Confirm Password */}
           <div className="relative flex items-center bg-white/10 rounded-xl p-3 mb-6 w-full focus-within:ring-2 focus-within:ring-indigo-500">
+            {/* Icon */}
             <FaLock className="text-slate-400 mr-3" />
+
+            {/* Input */}
             <input
               type={showConfirm ? "text" : "password"}
               placeholder="আপনার পাসওয়ার্ড আবার লিখুন"
               {...register("confirmPassword", {
                 required: "Please confirm your password",
               })}
-              className="bg-transparent outline-none text-white w-full placeholder-slate-400 pr-8"
+              className="bg-transparent outline-none text-white w-full placeholder-slate-400"
             />
-            <button
-              type="button"
-              onClick={() => setShowConfirm(!showConfirm)}
-              className="absolute right-3 text-slate-400 hover:text-white transition"
-            >
-              {showConfirm ? <FaEyeSlash /> : <FaEye />}
-            </button>
           </div>
+
+          {/* Confirm Password Error */}
           {errors.confirmPassword && (
             <p className="text-red-400 text-sm -mt-3 mb-2">
               {errors.confirmPassword.message}
@@ -257,6 +266,7 @@ const SignUp = () => {
           </button>
         </form>
 
+        {/* Already have an account */}
         <p className="text-slate-300 text-sm">
           ইতিমধ্যেই একটি অ্যাকাউন্ট আছে?{" "}
           <a href="/" className="text-purple-400 font-semibold hover:underline">
