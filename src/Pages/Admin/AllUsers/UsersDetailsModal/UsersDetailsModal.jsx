@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 const UsersDetailsModal = ({ selectedUser, setSelectedUser }) => {
   if (!selectedUser) return null;
 
+  // Close Modal
   const handleClose = () => {
     document.getElementById("Users_Details_Modal").close();
     setSelectedUser("");
@@ -36,6 +37,7 @@ const UsersDetailsModal = ({ selectedUser, setSelectedUser }) => {
     >
       {/* Header */}
       <div>
+        {/* Close Button */}
         <button
           type="button"
           onClick={() => handleClose()}
@@ -44,6 +46,7 @@ const UsersDetailsModal = ({ selectedUser, setSelectedUser }) => {
           <ImCross className="text-xl" />
         </button>
 
+        {/* Title */}
         <h3 className="font-bold text-lg sm:text-xl text-center mb-4 pt-5 md:pt-0">
           User Details
         </h3>

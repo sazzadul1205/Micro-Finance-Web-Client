@@ -11,42 +11,45 @@ import { FaTrash, FaInfoCircle } from "react-icons/fa";
 // Hooks
 import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
 
-// Modal
-import UsersDetailsModal from "./UsersDetailsModal/UsersDetailsModal";
+// Components
+import NumberName from "./NumberName/NumberName";
 
-const AllUsers = () => {
+// Modal
+import NomineeDetailsModal from "./NomineeDetailsModal/NomineeDetailsModal";
+
+const AllNominees = () => {
   const axiosPublic = useAxiosPublic();
 
   // Search states
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedBloodGroup, setSelectedBloodGroup] = useState("");
+  const [selectedRelation, setSelectedRelation] = useState("");
 
   // Selected User
   const [selectedUser, setSelectedUser] = useState(null);
 
+  // Nominees APIs
   const {
-    data: allUsers,
+    data: allNominees,
     isLoading,
     refetch,
     error,
   } = useQuery({
-    queryKey: ["AllUsers"],
-    queryFn: () => axiosPublic.get("/Users").then((res) => res.data),
+    queryKey: ["AllNominees"],
+    queryFn: () => axiosPublic.get("/NomineeInfo").then((res) => res.data),
   });
 
-  // Filter out admins and apply search/blood filters
-  const filteredUsers = allUsers
-    ?.filter((user) => user.role !== "admin")
-    .filter((user) => {
-      const matchesSearch =
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.phone.includes(searchTerm);
+  // Filter nominees by search term and relation
+  const filteredNominees = allNominees?.filter((nominee) => {
+    const matchesSearch = [nominee.nominee_name, nominee.nominee_phone]
+      .join(" ")
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
 
-      const matchesBlood =
-        !selectedBloodGroup || user.blood_group === selectedBloodGroup;
+    const matchesRelation =
+      !selectedRelation || nominee.relation === selectedRelation;
 
-      return matchesSearch && matchesBlood;
-    });
+    return matchesSearch && matchesRelation;
+  });
 
   // Handle Delete
   const handleDelete = async (userId) => {
@@ -63,7 +66,7 @@ const AllUsers = () => {
 
     if (result.isConfirmed) {
       try {
-        await axiosPublic.delete(`/Users/${userId}`);
+        await axiosPublic.delete(`/NomineeInfo/${userId}`);
 
         Swal.fire({
           icon: "success",
@@ -120,89 +123,74 @@ const AllUsers = () => {
     <div className="p-6 text-black w-full">
       {/* Title */}
       <h1 className="text-purple-600 text-2xl font-bold text-center pb-5">
-        All Users
+        All Nominees
       </h1>
 
-      {/* Filters */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between md:gap-6 mb-4 w-full">
-        {/* Search by Name or Phone */}
-        <div className="flex flex-col w-full md:w-1/3">
-          <label htmlFor="search" className="mb-1 font-semibold text-gray-700">
-            Search by Name or Phone
-          </label>
-          <input
-            id="search"
-            type="text"
-            placeholder="Type name or phone..."
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+      {/* --- Filters --- */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-5 gap-3">
+        {/* Search Input */}
+        <input
+          type="text"
+          placeholder="Search by name or phone..."
+          className="w-full md:w-1/3 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
 
-        {/* Filter by Blood Group */}
-        <div className="flex flex-col w-full md:w-1/6 mt-2 md:mt-0">
-          <label
-            htmlFor="bloodGroup"
-            className="mb-1 font-semibold text-gray-700"
-          >
-            Blood Group
-          </label>
-          <select
-            id="bloodGroup"
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
-            value={selectedBloodGroup}
-            onChange={(e) => setSelectedBloodGroup(e.target.value)}
-          >
-            <option value="">All Blood Groups</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-          </select>
-        </div>
+        {/* Relation Filter */}
+        <select
+          className="w-full md:w-1/4 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+          value={selectedRelation}
+          onChange={(e) => setSelectedRelation(e.target.value)}
+        >
+          <option value="">All Relations</option>
+          <option value="father">Father</option>
+          <option value="mother">Mother</option>
+          <option value="brother">Brother</option>
+          <option value="sister">Sister</option>
+          <option value="spouse">Spouse</option>
+          <option value="other">Other</option>
+        </select>
       </div>
 
-      {/* Table */}
+      {/* --- Table --- */}
       <div className="overflow-x-auto w-full rounded-lg shadow-lg border border-gray-200">
         <table className="table w-full">
           {/* Table Header */}
           <thead className="bg-purple-600 text-white uppercase text-sm tracking-wider">
             <tr>
-              <th className="text-center">#</th>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Blood Group</th>
-              <th>Father&apos;s Name</th>
-              <th>Mother&apos;s Name</th>
-              <th className="text-center">Actions</th>
+              <th className="px-4 py-3 border-b">#</th>
+              <th className="px-4 py-3 border-b">User Name</th>
+              <th className="px-4 py-3 border-b">Nominee Name</th>
+              <th className="px-4 py-3 border-b">Phone</th>
+              <th className="px-4 py-3 border-b">Relation</th>
+              <th className="px-4 py-3 border-b">NID</th>
+              <th className="px-4 py-3 border-b text-center">Action</th>
             </tr>
           </thead>
 
           {/* Table Body */}
           <tbody className="text-gray-700">
-            {filteredUsers?.length > 0 ? (
-              filteredUsers.map((user, index) => (
+            {filteredNominees.length > 0 ? (
+              filteredNominees.map((nominee, index) => (
                 <tr
-                  key={user._id}
+                  key={nominee._id}
                   className="hover:bg-purple-50 transition-colors duration-200"
                 >
                   <td className="text-center font-medium">{index + 1}</td>
-                  <td className="font-semibold">{user.name}</td>
-                  <td>{user.phone}</td>
-                  <td>{user.blood_group || "N/A"}</td>
-                  <td>{user.fathers_name || "N/A"}</td>
-                  <td>{user.mothers_name || "N/A"}</td>
+                  <td className="font-semibold">
+                    <NumberName phone={nominee?.user_phone} />
+                  </td>
+                  <td className="font-semibold">{nominee.nominee_name}</td>
+                  <td>{nominee.nominee_phone}</td>
+                  <td>{nominee.relation}</td>
+                  <td>{nominee.nominee_nid}</td>
                   <td className="flex justify-center gap-2">
                     <button
                       onClick={() => {
-                        setSelectedUser(user);
+                        setSelectedUser(nominee);
                         document
-                          .getElementById("Users_Details_Modal")
+                          .getElementById("Nominee_Details_Modal")
                           ?.showModal();
                       }}
                       className="flex items-center gap-2 px-5 py-2 text-md bg-blue-500 text-white rounded-lg 
@@ -211,7 +199,7 @@ const AllUsers = () => {
                       <FaInfoCircle /> Details
                     </button>
                     <button
-                      onClick={() => handleDelete(user?._id)}
+                      onClick={() => handleDelete(nominee?._id)}
                       className=" flex items-center gap-2 px-5 py-2 text-md bg-red-500 text-white rounded-lg 
                                 shadow-md hover:shadow-2xl hover:bg-red-600 transition-transform duration-200 cursor-pointer"
                     >
@@ -222,8 +210,11 @@ const AllUsers = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={10} className="text-center py-4 text-gray-500">
-                  No users found.
+                <td
+                  colSpan="5"
+                  className="text-center py-6 text-gray-500 font-medium"
+                >
+                  No nominees found.
                 </td>
               </tr>
             )}
@@ -233,8 +224,8 @@ const AllUsers = () => {
 
       {/* ---------- Modals ---------- */}
       {/* --------- User Details Modal --------- */}
-      <dialog id="Users_Details_Modal" className="modal">
-        <UsersDetailsModal
+      <dialog id="Nominee_Details_Modal" className="modal">
+        <NomineeDetailsModal
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
         />
@@ -243,4 +234,4 @@ const AllUsers = () => {
   );
 };
 
-export default AllUsers;
+export default AllNominees;
