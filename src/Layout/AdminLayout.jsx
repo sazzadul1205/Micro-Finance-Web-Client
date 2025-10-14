@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 // Shared
 import Navbar from "../Shared/Navbar";
 
-const MainLayout = () => {
+const AdminLayout = () => {
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
@@ -13,4 +13,4 @@ const MainLayout = () => {
   );
 };
 
-export default MainLayout;
+export default AdminLayout;

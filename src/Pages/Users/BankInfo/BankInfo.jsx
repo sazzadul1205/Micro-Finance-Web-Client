@@ -15,10 +15,10 @@ import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 
 // Shared
-import TextInput from "../../Shared/TextInput";
+import TextInput from "../../../Shared/TextInput";
 
 // Hooks
-import useAxiosPublic from "../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
 
 // Payment Options
 const paymentOptions = [
@@ -54,7 +54,11 @@ const BankInfo = () => {
   const [paymentMethod, setPaymentMethod] = useState("");
 
   // Check if basic info already submitted
-  const { data: BankInfoExistCheck, isLoading } = useQuery({
+  const {
+    data: BankInfoExistCheck,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["BankInfoExistCheck", user?.phone],
     queryFn: () =>
       axiosPublic
@@ -131,6 +135,29 @@ const BankInfo = () => {
       navigate("/Loans");
     }
   };
+
+  // Loading State
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-purple-600"></div>
+        <span className="ml-3 text-purple-700 font-semibold">Loading...</span>
+      </div>
+    );
+
+  // Error State
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 bg-red-50 rounded-lg p-6 border border-red-300">
+        <p className="text-red-600 font-semibold text-lg mb-2">
+          Oops! Something went wrong.
+        </p>
+        <p className="text-red-500 text-sm">
+          {error?.message || "Unable to load data. Please try again later."}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-4xl shadow-2xl rounded-2xl mt-5 text-black">

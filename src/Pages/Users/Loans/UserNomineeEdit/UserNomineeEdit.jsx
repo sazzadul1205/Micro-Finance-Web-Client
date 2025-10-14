@@ -51,7 +51,11 @@ const UserNomineeEdit = () => {
   const [nomineePassportPhoto, setNomineePassportPhoto] = useState([]);
 
   // Fetch nominee info
-  const { data: NomineeInfo, isLoading } = useQuery({
+  const {
+    data: NomineeInfo,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["NomineeInfo", user?.phone],
     queryFn: () =>
       axiosPublic
@@ -178,6 +182,20 @@ const UserNomineeEdit = () => {
         <span className="ml-3 text-purple-700 font-semibold">Loading...</span>
       </div>
     );
+
+  // Error State
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 bg-red-50 rounded-lg p-6 border border-red-300">
+        <p className="text-red-600 font-semibold text-lg mb-2">
+          Oops! Something went wrong.
+        </p>
+        <p className="text-red-500 text-sm">
+          {error?.message || "Unable to load data. Please try again later."}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>

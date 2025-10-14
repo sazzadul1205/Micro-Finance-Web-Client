@@ -58,7 +58,11 @@ const UserInformationEdit = () => {
   const [passportPhoto, setPassportPhoto] = useState([]);
 
   // Fetch existing user info
-  const { data: UserBasicInfo, isLoading } = useQuery({
+  const {
+    data: UserBasicInfo,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["UserBasicInfo", user?.phone],
     queryFn: () =>
       axiosPublic.get(`/Users/Phone/${user?.phone}`).then((res) => res.data),
@@ -205,6 +209,20 @@ const UserInformationEdit = () => {
         <span className="ml-3 text-purple-700 font-semibold">Loading...</span>
       </div>
     );
+
+  // Error State
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 bg-red-50 rounded-lg p-6 border border-red-300">
+        <p className="text-red-600 font-semibold text-lg mb-2">
+          Oops! Something went wrong.
+        </p>
+        <p className="text-red-500 text-sm">
+          {error?.message || "Unable to load data. Please try again later."}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>

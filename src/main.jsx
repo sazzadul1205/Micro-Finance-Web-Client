@@ -17,10 +17,11 @@ import MainLayout from "./Layout/MainLayout";
 
 // Routes
 import PrivateRoute from "./Routes/PrivateRoute";
-import PersonalInfo from "./Pages/Users/PersonalInfo";
-import NomineeInfo from "./Pages/Users/NomineeInfo";
-import BankInfo from "./Pages/Users/BankInfo";
+import PersonalInfo from "./Pages/Users/PersonalInfo/PersonalInfo";
+import NomineeInfo from "./Pages/Users/NomineeInfo/NomineeInfo";
+import BankInfo from "./Pages/Users/BankInfo/BankInfo";
 import Loans from "./Pages/Users/Loans/Loans";
+import AdminLayout from "./Layout/AdminLayout";
 
 // React Query
 const queryClient = new QueryClient();
@@ -82,6 +83,10 @@ createRoot(document.getElementById("root")).render(
                 </PrivateRoute>
               }
             />
+          </Route>
+
+          <Route element={<AdminLayout />}> 
+
           </Route>
         </Routes>
       </BrowserRouter>

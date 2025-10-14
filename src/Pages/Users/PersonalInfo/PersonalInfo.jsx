@@ -22,15 +22,15 @@ import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 
 // Assets
-import Loan from "../../assets/PersonalInfo/Loan.png";
+import Loan from "../../../assets/PersonalInfo/Loan.png";
 
 // Shared
-import TextInput from "../../Shared/TextInput";
-import SignaturePad from "../../Shared/SignaturePad";
-import FileUploadCard from "../../Shared/FileUploadCard";
+import TextInput from "../../../Shared/TextInput";
+import SignaturePad from "../../../Shared/SignaturePad";
+import FileUploadCard from "../../../Shared/FileUploadCard";
 
 // Hooks
-import useAxiosPublic from "../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
 
 // Image Uploader
 const Image_Hosting_Key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
@@ -61,7 +61,11 @@ const PersonalInfo = () => {
   const [passportPhoto, setPassportPhoto] = useState([]);
 
   // Check if basic info already submitted
-  const { data: UserBasicInfoExistCheck, isLoading } = useQuery({
+  const {
+    data: UserBasicInfoExistCheck,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["UserBasicInfoExistsCheck", user?.phone],
     queryFn: () =>
       axiosPublic
@@ -156,6 +160,29 @@ const PersonalInfo = () => {
       navigate("/NomineeInfo");
     }
   };
+
+  // Loading State
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-purple-600"></div>
+        <span className="ml-3 text-purple-700 font-semibold">Loading...</span>
+      </div>
+    );
+
+  // Error State
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 bg-red-50 rounded-lg p-6 border border-red-300">
+        <p className="text-red-600 font-semibold text-lg mb-2">
+          Oops! Something went wrong.
+        </p>
+        <p className="text-red-500 text-sm">
+          {error?.message || "Unable to load data. Please try again later."}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-4xl shadow-2xl rounded-md p-4">
