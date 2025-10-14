@@ -8,6 +8,7 @@ import {
   FaMobileAlt,
   FaUniversity,
 } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
 
 // Packages
 import Swal from "sweetalert2";
@@ -15,10 +16,10 @@ import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 
 // Shared
-import TextInput from "../../Shared/TextInput";
+import TextInput from "../../../../Shared/TextInput";
 
 // Hooks
-import useAxiosPublic from "../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../../../Hooks/useAxiosPublic";
 
 // Payment Options
 const paymentOptions = [
@@ -30,14 +31,12 @@ const paymentOptions = [
   { value: "bank_transfer", label: "ব্যাংক ট্রান্সফার" },
 ];
 
-const BankInfo = () => {
+const UserBankInfoEdit = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const axiosPublic = useAxiosPublic();
-
-  // Navigation
   const navigate = useNavigate();
 
-  // Form Handler
+  // Form handler
   const {
     register,
     handleSubmit,
@@ -45,35 +44,35 @@ const BankInfo = () => {
     formState: { errors },
   } = useForm();
 
-  // Loading State
+  // Loading states
   const [loading, setLoading] = useState(false);
   const [finalSaveLoading, setFinalSaveLoading] = useState(false);
 
-  // Form State
+  // Form state
   const [accounts, setAccounts] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState("");
 
-  // Check if basic info already submitted
-  const { data: BankInfoExistCheck, isLoading } = useQuery({
-    queryKey: ["BankInfoExistCheck", user?.phone],
+  // Fetch user bank info
+  const { data: BankInfo, isLoading } = useQuery({
+    queryKey: ["BankInfo", user?.phone],
     queryFn: () =>
-      axiosPublic
-        .get(`/Users/BankInfoExistCheck/${user?.phone}`)
-        .then((res) => res.data),
-    enabled: !!user?.phone, // only run if phone exists
+      axiosPublic.get(`/Users/Phone/${user?.phone}`).then((res) => res.data),
+    enabled: !!user?.phone,
   });
 
-  // Redirect if basic info already submitted
+  // Populate existing accounts
   useEffect(() => {
-    if (!isLoading && BankInfoExistCheck?.bankInfoSubmitted) {
-      navigate("/Loans"); // redirect if basic info already submitted
+    if (BankInfo?.BillInfo?.length) {
+      setAccounts(BankInfo.BillInfo);
     }
-  }, [BankInfoExistCheck, isLoading, navigate]);
+  }, [BankInfo]);
 
-  // Save individual card
+  // Save individual account (add new)
   const onSubmit = (data) => {
-    if (!paymentMethod) return alert("পেমেন্ট মেথড নির্বাচন করুন!");
+    if (!paymentMethod) return Swal.fire("পেমেন্ট মেথড নির্বাচন করুন!");
+
     setLoading(true);
+
     setTimeout(() => {
       setAccounts((prev) => [
         ...prev,
@@ -85,7 +84,12 @@ const BankInfo = () => {
     }, 500);
   };
 
-  // Final submit to log/send all saved accounts
+  // Delete account
+  const handleDelete = (idx) => {
+    setAccounts(accounts.filter((_, i) => i !== idx));
+  };
+
+  // Final submit (update server)
   const onFinalSubmit = async () => {
     if (!user?.phone) {
       return Swal.fire({
@@ -94,7 +98,6 @@ const BankInfo = () => {
         text: "ব্যবহারকারীর ফোন নম্বর পাওয়া যায়নি।",
       });
     }
-
     if (accounts.length === 0) {
       return Swal.fire({
         icon: "warning",
@@ -105,12 +108,10 @@ const BankInfo = () => {
 
     setFinalSaveLoading(true);
 
-    const formData = {
-      BillInfo: accounts,
-    };
-
     try {
-      await axiosPublic.put(`/Users/Phone/${user.phone}`, formData);
+      await axiosPublic.put(`/Users/Phone/${user.phone}`, {
+        BillInfo: accounts,
+      });
 
       Swal.fire({
         icon: "success",
@@ -118,7 +119,7 @@ const BankInfo = () => {
         text: "আপনার একাউন্ট তথ্য সফলভাবে সংরক্ষিত হয়েছে।",
       });
 
-      setAccounts([]);
+      navigate("/Loans");
     } catch (error) {
       console.error(error);
       Swal.fire({
@@ -128,12 +129,20 @@ const BankInfo = () => {
       });
     } finally {
       setFinalSaveLoading(false);
-      navigate("/Loans");
     }
   };
 
+  // Loading State
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-purple-600"></div>
+        <span className="ml-3 text-purple-700 font-semibold">Loading...</span>
+      </div>
+    );
+
   return (
-    <div className="mx-auto max-w-4xl shadow-2xl rounded-2xl mt-5 text-black">
+    <div>
       {/* Header */}
       <div className="text-center space-y-3 items-center gap-4 bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 py-5 text-white rounded-t-3xl">
         <h3 className="text-3xl font-semibold">ব্যাংক একাউন্ট তথ্য</h3>
@@ -165,7 +174,7 @@ const BankInfo = () => {
       {/* Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-4 mt-4 px-5 pb-10"
+        className="space-y-4 grid grid-cols-2 gap-3 mt-4 px-5 pb-10 text-black"
       >
         {["bkash", "nogad", "rocket", "upay", "surecash"].includes(
           paymentMethod
@@ -228,11 +237,11 @@ const BankInfo = () => {
           error={errors.account_holder_name}
         />
 
-        {/* Save individual card */}
+        {/* Submit */}
         <button
           type="submit"
           disabled={loading}
-          className={`w-full py-3 text-white font-semibold rounded-md transition-colors cursor-pointer ${
+          className={`col-span-2 w-full py-3 text-white font-semibold rounded-md transition-colors cursor-pointer ${
             loading
               ? "bg-purple-400 cursor-not-allowed"
               : "bg-purple-600 hover:bg-purple-700"
@@ -242,50 +251,57 @@ const BankInfo = () => {
         </button>
       </form>
 
-      {/* Display saved accounts */}
+      {/* Preview existing accounts */}
       {accounts.length > 0 && (
-        <div className="px-5 pb-5 mt-6 space-y-6">
+        <div className="px-5 pb-5 mt-3 space-y-6">
+          {/* Header */}
           <h3 className="text-2xl font-semibold text-gray-800">
             সংরক্ষিত একাউন্টসমূহ
           </h3>
+
+          {/* Accounts */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {accounts.map((acc, idx) => (
               <div
                 key={idx}
-                className="p-5 bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300"
+                className="p-5 bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300 relative"
               >
+                <button
+                  type="button"
+                  onClick={() => handleDelete(idx)}
+                  className="absolute top-5 right-5 text-red-500 font-bold hover:text-red-700 cursor-pointer"
+                >
+                  <ImCross />
+                </button>
+
                 <h4 className="text-lg font-bold mb-3 text-purple-700">
                   {acc.payment_method === "bank_transfer"
                     ? "ব্যাংক ট্রান্সফার"
                     : acc.payment_method.charAt(0).toUpperCase() +
                       acc.payment_method.slice(1)}
                 </h4>
+
                 {acc.mobile_number && (
                   <p className="flex items-center gap-2 text-gray-700 mb-1">
-                    <FaMobileAlt className="text-purple-500" />
                     মোবাইল নাম্বার: {acc.mobile_number}
                   </p>
                 )}
                 {acc.bank_name && (
                   <p className="flex items-center gap-2 text-gray-700 mb-1">
-                    <FaUniversity className="text-purple-500" />
                     ব্যাংকের নাম: {acc.bank_name}
                   </p>
                 )}
                 {acc.account_number && (
                   <p className="flex items-center gap-2 text-gray-700 mb-1">
-                    <FaMoneyBillWave className="text-purple-500" />
                     একাউন্ট নাম্বার: {acc.account_number}
                   </p>
                 )}
                 {acc.branch_name && (
                   <p className="flex items-center gap-2 text-gray-700 mb-1">
-                    <FaUniversity className="text-purple-500" />
                     শাখা: {acc.branch_name}
                   </p>
                 )}
                 <p className="flex items-center gap-2 text-gray-700 mt-2">
-                  <FaUser className="text-purple-500" />
                   একাউন্ট হোল্ডার: {acc.account_holder_name}
                 </p>
               </div>
@@ -294,8 +310,8 @@ const BankInfo = () => {
         </div>
       )}
 
-      {/* Final submit button */}
-      <div className="p-5 ">
+      {/* Final save */}
+      <div className="p-5">
         <button
           type="button"
           onClick={onFinalSubmit}
@@ -313,4 +329,4 @@ const BankInfo = () => {
   );
 };
 
-export default BankInfo;
+export default UserBankInfoEdit;

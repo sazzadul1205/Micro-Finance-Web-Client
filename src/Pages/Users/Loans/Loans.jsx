@@ -1,4 +1,6 @@
 import { useState } from "react";
+
+// Icons
 import {
   FaMoneyBillWave,
   FaClock,
@@ -7,15 +9,20 @@ import {
   FaUsers,
   FaUniversity,
 } from "react-icons/fa";
-import LoanRequest from "./LoanRequest/LoanRequest";
+
+// Components
 import LoanStatus from "./LoanStatus/LoanStatus";
 import LoanHistory from "./LoanHistory/LoanHistory";
-import UserInformationEdit from "./UserInformationEdit/UserInformationEdit";
+import LoanRequest from "./LoanRequest/LoanRequest";
 import UserNomineeEdit from "./UserNomineeEdit/UserNomineeEdit";
+import UserBankInfoEdit from "./UserBankInfoEdit/UserBankInfoEdit";
+import UserInformationEdit from "./UserInformationEdit/UserInformationEdit";
 
 const Loans = () => {
+  // Active Tabs
   const [activeTab, setActiveTab] = useState("request");
 
+  // Menu Items
   const menuItems = [
     // Loan Management
     { key: "request", label: "ঋণ অনুরোধ", icon: FaMoneyBillWave },
@@ -35,10 +42,12 @@ const Loans = () => {
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-72 bg-white shadow-lg rounded-r-2xl p-5">
+        {/* Header */}
         <h2 className="text-2xl font-bold text-purple-700 mb-6 text-center border-b pb-2">
           ঋণ ব্যবস্থাপনা
         </h2>
 
+        {/* Navigation */}
         <nav className="space-y-2">
           {menuItems.map(({ key, label, icon: Icon, divider }) =>
             divider ? (
@@ -79,7 +88,7 @@ const Loans = () => {
           ) : activeTab === "nominee" ? (
             <UserNomineeEdit />
           ) : activeTab === "bankInfo" ? (
-            "ব্যাংক একাউন্ট তথ্য পৃষ্ঠা লোড হচ্ছে..."
+            <UserBankInfoEdit />
           ) : (
             "পৃষ্ঠা লোড হচ্ছে..."
           )}

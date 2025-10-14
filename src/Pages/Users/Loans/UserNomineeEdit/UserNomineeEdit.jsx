@@ -77,8 +77,6 @@ const UserNomineeEdit = () => {
       setNomineePassportPhoto([NomineeInfo.nominee_passport_photo]);
   }, [NomineeInfo, setValue]);
 
-  console.log(NomineeInfo);
-
   // Helper: upload file To Imgbb
   const uploadToImgBB = async (file) => {
     const formData = new FormData();
@@ -173,7 +171,13 @@ const UserNomineeEdit = () => {
   };
 
   // Loading State
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-purple-600"></div>
+        <span className="ml-3 text-purple-700 font-semibold">Loading...</span>
+      </div>
+    );
 
   return (
     <div>
@@ -289,6 +293,7 @@ const UserNomineeEdit = () => {
             </div>
           </div>
 
+          {/* Submit */}
           <div className="flex pt-4">
             <button
               type="submit"

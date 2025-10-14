@@ -31,7 +31,6 @@ import FileUploadCard from "../../../../Shared/FileUploadCard";
 // Hooks
 import useAxiosPublic from "../../../../../Hooks/useAxiosPublic";
 
-
 // Image Uploader
 const Image_Hosting_Key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const Image_Hosting_API = `https://api.imgbb.com/1/upload?key=${Image_Hosting_Key}`;
@@ -107,6 +106,7 @@ const UserInformationEdit = () => {
     }
   };
 
+  // Submit Handler
   const onSubmit = async (data) => {
     try {
       // Check if user is logged in
@@ -118,6 +118,7 @@ const UserInformationEdit = () => {
         });
       }
 
+      // Set loading
       setLoading(true);
 
       // Helper: upload file if new
@@ -197,7 +198,13 @@ const UserInformationEdit = () => {
   };
 
   // Loading State
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-purple-600"></div>
+        <span className="ml-3 text-purple-700 font-semibold">Loading...</span>
+      </div>
+    );
 
   return (
     <div>
@@ -211,18 +218,23 @@ const UserInformationEdit = () => {
           </div>
         </div>
 
+        {/* Divider */}
         <p className="bg-black h-[1px] w-[99%] mx-auto my-6" />
 
+        {/* Title */}
         <div className="flex items-center gap-5 text-lg text-blue-500">
           <FaUser />
           <p className="text-black font-semibold">ব্যক্তিগত তথ্য</p>
         </div>
 
+        {/* Form */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="text-black space-y-6"
         >
+          {/* Inputs */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+            {/* Name */}
             <TextInput
               label="নাম"
               id="name"
@@ -233,6 +245,8 @@ const UserInformationEdit = () => {
               validation={{ required: "নাম আবশ্যক" }}
               error={errors.name}
             />
+
+            {/* Fathers Name */}
             <TextInput
               label="পিতার নাম"
               id="fathers_name"
@@ -372,6 +386,7 @@ const UserInformationEdit = () => {
             />
           </div>
 
+          {/* Submit */}
           <div className="flex pt-4">
             <button
               type="submit"
