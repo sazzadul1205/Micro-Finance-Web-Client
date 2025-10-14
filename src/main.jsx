@@ -20,7 +20,7 @@ import PrivateRoute from "./Routes/PrivateRoute";
 import PersonalInfo from "./Pages/Users/PersonalInfo";
 import NomineeInfo from "./Pages/Users/NomineeInfo";
 import BankInfo from "./Pages/Users/BankInfo";
-import Loans from "./Pages/Users/Loans";
+import Loans from "./Pages/Users/Loans/Loans";
 
 // React Query
 const queryClient = new QueryClient();

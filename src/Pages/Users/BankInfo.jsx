@@ -35,6 +35,7 @@ const BankInfo = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const axiosPublic = useAxiosPublic();
 
+  // Navigation
   const navigate = useNavigate();
 
   // Form Handler
