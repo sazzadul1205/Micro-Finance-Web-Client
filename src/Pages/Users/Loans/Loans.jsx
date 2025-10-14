@@ -11,6 +11,7 @@ import LoanRequest from "./LoanRequest/LoanRequest";
 import LoanStatus from "./LoanStatus/LoanStatus";
 import LoanHistory from "./LoanHistory/LoanHistory";
 import UserInformationEdit from "./UserInformationEdit/UserInformationEdit";
+import UserNomineeEdit from "./UserNomineeEdit/UserNomineeEdit";
 
 const Loans = () => {
   const [activeTab, setActiveTab] = useState("request");
@@ -76,7 +77,7 @@ const Loans = () => {
           ) : activeTab === "editUser" ? (
             <UserInformationEdit />
           ) : activeTab === "nominee" ? (
-            "মনোনীত ব্যক্তির তথ্য পৃষ্ঠা লোড হচ্ছে..."
+            <UserNomineeEdit />
           ) : activeTab === "bankInfo" ? (
             "ব্যাংক একাউন্ট তথ্য পৃষ্ঠা লোড হচ্ছে..."
           ) : (

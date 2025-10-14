@@ -1,4 +1,12 @@
 import { useEffect, useState } from "react";
+
+// Packages
+import axios from "axios";
+import Swal from "sweetalert2";
+import { useForm } from "react-hook-form";
+import { useQuery } from "@tanstack/react-query";
+
+// Icons
 import {
   FaBriefcase,
   FaFemale,
@@ -12,17 +20,19 @@ import {
   FaUserTie,
 } from "react-icons/fa";
 
-import TextInput from "../../../../Shared/TextInput";
-import FileUploadCard from "../../../../Shared/FileUploadCard";
-import SignaturePad from "../../../../Shared/SignaturePad";
+// Assets
 import Loan from "../../../../assets/PersonalInfo/Loan.png";
 
-import { useForm } from "react-hook-form";
-import useAxiosPublic from "../../../../../Hooks/useAxiosPublic";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import Swal from "sweetalert2";
+// Shared
+import TextInput from "../../../../Shared/TextInput";
+import SignaturePad from "../../../../Shared/SignaturePad";
+import FileUploadCard from "../../../../Shared/FileUploadCard";
 
+// Hooks
+import useAxiosPublic from "../../../../../Hooks/useAxiosPublic";
+
+
+// Image Uploader
 const Image_Hosting_Key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const Image_Hosting_API = `https://api.imgbb.com/1/upload?key=${Image_Hosting_Key}`;
 const ImgBB_Album_Key = import.meta.env.VITE_IMAGE_ALBUM_KEY;
@@ -30,8 +40,8 @@ const ImgBB_Album_Key = import.meta.env.VITE_IMAGE_ALBUM_KEY;
 const UserInformationEdit = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const axiosPublic = useAxiosPublic();
-  const [loading, setLoading] = useState(false);
 
+  // Form Handler
   const {
     register,
     handleSubmit,
@@ -39,6 +49,10 @@ const UserInformationEdit = () => {
     formState: { errors },
   } = useForm();
 
+  // Loading State
+  const [loading, setLoading] = useState(false);
+
+  // User Form State
   const [nidBack, setNidBack] = useState([]);
   const [nidFront, setNidFront] = useState([]);
   const [signature, setSignature] = useState(null);
@@ -73,6 +87,7 @@ const UserInformationEdit = () => {
     if (UserBasicInfo.signature) setSignature(UserBasicInfo.signature);
   }, [UserBasicInfo, setValue]);
 
+  // Helper: upload file To Imgbb
   const uploadToImgBB = async (file) => {
     const formData = new FormData();
     formData.append("image", file);
@@ -181,6 +196,7 @@ const UserInformationEdit = () => {
     }
   };
 
+  // Loading State
   if (isLoading) return <p>Loading...</p>;
 
   return (
