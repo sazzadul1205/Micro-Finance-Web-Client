@@ -1,15 +1,14 @@
 import { useState } from "react";
 import {
   FaMoneyBillWave,
-  FaListAlt,
   FaClock,
   FaHistory,
-  FaGavel,
   FaUserEdit,
   FaUsers,
   FaUniversity,
 } from "react-icons/fa";
 import LoanRequest from "./LoanRequest/LoanRequest";
+import LoanStatus from "./LoanStatus/LoanStatus";
 
 const Loans = () => {
   const [activeTab, setActiveTab] = useState("request");
@@ -19,8 +18,6 @@ const Loans = () => {
     { key: "request", label: "ঋণ অনুরোধ", icon: FaMoneyBillWave },
     { key: "status", label: "ঋণের অবস্থা", icon: FaClock },
     { key: "history", label: "ঋণ ইতিহাস", icon: FaHistory },
-    { key: "sue", label: "ঋণ মামলা ইতিহাস", icon: FaGavel },
-    { key: "installments", label: "কিস্তি বিবরণ", icon: FaListAlt },
 
     // Divider
     { key: "divider1", label: "—", divider: true },
@@ -50,7 +47,7 @@ const Loans = () => {
               <button
                 key={key}
                 onClick={() => setActiveTab(key)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all cursor-pointer ${
                   activeTab === key
                     ? "bg-purple-600 text-white shadow-md"
                     : "text-gray-700 hover:bg-purple-100 hover:text-purple-700"
@@ -71,13 +68,9 @@ const Loans = () => {
           {activeTab === "request" ? (
             <LoanRequest />
           ) : activeTab === "status" ? (
-            "ঋণের অবস্থা পৃষ্ঠা লোড হচ্ছে..."
+            <LoanStatus />
           ) : activeTab === "history" ? (
             "ঋণ ইতিহাস পৃষ্ঠা লোড হচ্ছে..."
-          ) : activeTab === "sue" ? (
-            "ঋণ মামলা ইতিহাস পৃষ্ঠা লোড হচ্ছে..."
-          ) : activeTab === "installments" ? (
-            "কিস্তি বিবরণ পৃষ্ঠা লোড হচ্ছে..."
           ) : activeTab === "editUser" ? (
             "ইউজার তথ্য সম্পাদনা পৃষ্ঠা লোড হচ্ছে..."
           ) : activeTab === "nominee" ? (

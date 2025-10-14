@@ -28,7 +28,7 @@ const TextInput = ({
       </label>
 
       <div className="relative">
-        {/* Icon for all field types */}
+        {/* Icon */}
         {Icon && (
           <Icon
             className={`absolute left-3 text-gray-400 pointer-events-none ${
@@ -42,15 +42,13 @@ const TextInput = ({
           <select
             id={id}
             required={required}
-            // allow react-hook-form / setValue to control the value
-            defaultValue=""
             {...(register ? register(id, validation) : {})}
             {...rest}
             className={`block w-full ${Icon ? "pl-10" : "pl-3"} border ${
               error ? "border-red-500" : "border-gray-300"
             } rounded-md shadow-sm py-3 pr-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
           >
-            {/* placeholder option — DO NOT use `selected` here */}
+            {/* Placeholder */}
             {selectPlaceholder && (
               <option value="" disabled>
                 {selectPlaceholder}
@@ -90,7 +88,7 @@ const TextInput = ({
         )}
       </div>
 
-      {/* Error Message */}
+      {/* Error */}
       {error && <p className="mt-1 text-sm text-red-600">{error.message}</p>}
     </div>
   );
