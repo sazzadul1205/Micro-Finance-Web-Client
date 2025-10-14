@@ -22,6 +22,7 @@ import NomineeInfo from "./Pages/Users/NomineeInfo/NomineeInfo";
 import BankInfo from "./Pages/Users/BankInfo/BankInfo";
 import Loans from "./Pages/Users/Loans/Loans";
 import AdminLayout from "./Layout/AdminLayout";
+import AllUsers from "./Pages/Admin/AllUsers/AllUsers";
 
 // React Query
 const queryClient = new QueryClient();
@@ -85,8 +86,10 @@ createRoot(document.getElementById("root")).render(
             />
           </Route>
 
-          <Route element={<AdminLayout />}> 
-
+          {/* ---------- Admin Routes ---------- */}
+          <Route element={<AdminLayout />}>
+            {/* All Users Route */}
+            <Route path="/Admin/AllUsers" element={<AllUsers />} />
           </Route>
         </Routes>
       </BrowserRouter>

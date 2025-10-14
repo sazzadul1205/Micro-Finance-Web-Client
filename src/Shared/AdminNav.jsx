@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 // Packages
 import Swal from "sweetalert2";
 
-const Navbar = () => {
+const AdminNav = () => {
   // Hooks
   const navigate = useNavigate();
 
@@ -36,13 +36,18 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-full py-4 px-6 bg-gradient-to-r from-purple-600 to-indigo-600 shadow-md flex justify-between items-center">
-      {/* Title */}
-      <div className="text-white text-xl font-bold">
+    <nav className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 shadow-md px-6 py-4 flex flex-col md:flex-row md:justify-between md:items-center gap-3 md:gap-0">
+      {/* Left: Title */}
+      <div className="text-white text-xl font-bold md:text-2xl">
         Naziur Rojman Banking Website
       </div>
 
-      {/* Logout Button */}
+      {/* Center: Role/Info */}
+      <div className="text-white text-lg font-medium text-center md:text-xl">
+        Admin Dashboard
+      </div>
+
+      {/* Right: Logout Button */}
       <button
         onClick={handleLogout}
         className="bg-white text-purple-600 font-semibold px-10 py-2 rounded-xl hover:bg-gray-200 transition-transform duration-200 shadow-md hover:shadow-2xl cursor-pointer"
@@ -53,4 +58,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default AdminNav;

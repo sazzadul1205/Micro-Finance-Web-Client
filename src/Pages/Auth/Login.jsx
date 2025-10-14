@@ -25,52 +25,52 @@ const Login = () => {
 
   // Handle submit
   const onSubmit = async (data) => {
-    setLoading(true); // start loading
+    setLoading(true);
 
-    // Get phone and password from form
     const { phone, password } = data;
 
-    // Check if fields are empty
     if (!phone || !password) {
-      setLoading(false); // stop loading
+      setLoading(false);
       Swal.fire({
         icon: "warning",
         title: "ফাঁকা ক্ষেত্র",
         text: "ফোন এবং পাসওয়ার্ড আবশ্যক",
         confirmButtonColor: "#6366F1",
       });
-      return; // Stop if missing
+      return;
     }
 
     try {
-      // Send login request to server
-      const res = await axiosPublic.post("/Users/Login", {
-        phone,
-        password, // Send plain password
-      });
+      const res = await axiosPublic.post("/Users/Login", { phone, password });
 
-      // If login is successful
       if (res.data?.success) {
-        // Save user in localStorage with expiry (30 minutes)
         const expiryTime = new Date().getTime() + 1000 * 60 * 30;
         localStorage.setItem(
           "user",
-          JSON.stringify({ phone, expiry: expiryTime })
+          JSON.stringify({
+            phone,
+            role: res.data.role || "user",
+            expiry: expiryTime,
+          })
         );
 
-        // Show success alert and redirect
         Swal.fire({
           icon: "success",
           title: "লগইন সফল",
           text: "স্বাগতম!",
           confirmButtonColor: "#6366F1",
         }).then(() => {
-          setLoading(false); // stop loading before redirect
-          window.location.href = "/PersonalInfo";
+          setLoading(false);
+
+          // Redirect based on role
+          if (res.data.role === "admin") {
+            window.location.href = "/Admin/AllUsers";
+          } else {
+            window.location.href = "/PersonalInfo";
+          }
         });
       } else {
-        // If server returns failure
-        setLoading(false); // stop loading
+        setLoading(false);
         Swal.fire({
           icon: "error",
           title: "লগইন ব্যর্থ",
@@ -79,8 +79,7 @@ const Login = () => {
         });
       }
     } catch (err) {
-      // If there is a network or server error
-      setLoading(false); // stop loading
+      setLoading(false);
       Swal.fire({
         icon: "error",
         title: "সার্ভার ত্রুটি",
