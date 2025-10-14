@@ -1,16 +1,38 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import PropTypes from "prop-types";
 
-const SignaturePad = ({ label = "দস্তখত দিন", onChange, required = false }) => {
+const SignaturePad = ({
+  label = "দস্তখত দিন",
+  onChange,
+  required = false,
+  defaultValue = null, // existing signature URL or Blob
+  disabled = false, // parent can lock editing
+}) => {
   const sigCanvas = useRef(null);
   const [error, setError] = useState("");
-  const [locked, setLocked] = useState(false); // locked after save
+  const [locked, setLocked] = useState(disabled); // respect parent disabled initially
+  const [preview, setPreview] = useState(null); // show existing signature if available
+
+  // Load default signature
+  useEffect(() => {
+    if (defaultValue) {
+      if (typeof defaultValue === "string") {
+        setPreview(defaultValue); // URL
+        setLocked(true); // lock if a signature exists
+      } else {
+        const url = URL.createObjectURL(defaultValue);
+        setPreview(url);
+        setLocked(true);
+      }
+    }
+  }, [defaultValue]);
 
   // Clear the signature and allow redraw
   const tryAgain = () => {
     sigCanvas.current.clear();
     setLocked(false);
+    setPreview(null);
     setError("");
     onChange && onChange(null);
   };
@@ -34,9 +56,11 @@ const SignaturePad = ({ label = "দস্তখত দিন", onChange, requir
     }
     const blob = new Blob([ab], { type: mimeString });
 
+    const url = URL.createObjectURL(blob);
+    setPreview(url);
     setLocked(true);
     setError("");
-    onChange && onChange(blob); // Send the Blob to the parent
+    onChange && onChange(blob); // Send the Blob to parent
     return blob;
   };
 
@@ -51,21 +75,29 @@ const SignaturePad = ({ label = "দস্তখত দিন", onChange, requir
           locked ? "bg-gray-50" : "bg-white"
         }`}
       >
-        <SignatureCanvas
-          ref={sigCanvas}
-          penColor="black"
-          canvasProps={{
-            width: 500,
-            height: 200,
-            className: "rounded-md",
-            style: { cursor: locked ? "not-allowed" : "crosshair" },
-          }}
-          backgroundColor={locked ? "#f9fafb" : "#ffffff"}
-          onEnd={() => setError("")}
-        />
+        {!preview || !locked ? (
+          <SignatureCanvas
+            ref={sigCanvas}
+            penColor="black"
+            canvasProps={{
+              width: 500,
+              height: 200,
+              className: "rounded-md",
+              style: { cursor: locked ? "not-allowed" : "crosshair" },
+            }}
+            backgroundColor={locked ? "#f9fafb" : "#ffffff"}
+            onEnd={() => setError("")}
+          />
+        ) : (
+          <img
+            src={preview}
+            alt="Signature Preview"
+            className="w-full h-40 object-contain rounded-md"
+          />
+        )}
 
         {/* Overlay to block interaction when locked */}
-        {locked && (
+        {(locked || disabled) && (
           <div
             className="absolute inset-0 bg-transparent"
             style={{ cursor: "not-allowed" }}
@@ -73,8 +105,9 @@ const SignaturePad = ({ label = "দস্তখত দিন", onChange, requir
         )}
       </div>
 
+      {/* Buttons */}
       <div className="mt-5">
-        {!locked ? (
+        {!locked && !disabled ? (
           <div className="flex justify-between items-center">
             <button
               type="button"
@@ -91,7 +124,7 @@ const SignaturePad = ({ label = "দস্তখত দিন", onChange, requir
               সংরক্ষণ
             </button>
           </div>
-        ) : (
+        ) : locked && !disabled ? (
           <button
             type="button"
             onClick={tryAgain}
@@ -99,7 +132,7 @@ const SignaturePad = ({ label = "দস্তখত দিন", onChange, requir
           >
             পুনরায় চেষ্টা করুন
           </button>
-        )}
+        ) : null}
       </div>
 
       {error && <p className="text-red-600 mt-1 text-sm">{error}</p>}
@@ -111,6 +144,11 @@ SignaturePad.propTypes = {
   label: PropTypes.string,
   onChange: PropTypes.func,
   required: PropTypes.bool,
+  defaultValue: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.instanceOf(Blob),
+  ]),
+  disabled: PropTypes.bool,
 };
 
 export default SignaturePad;

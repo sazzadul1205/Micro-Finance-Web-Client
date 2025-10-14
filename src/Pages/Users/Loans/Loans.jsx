@@ -9,6 +9,8 @@ import {
 } from "react-icons/fa";
 import LoanRequest from "./LoanRequest/LoanRequest";
 import LoanStatus from "./LoanStatus/LoanStatus";
+import LoanHistory from "./LoanHistory/LoanHistory";
+import UserInformationEdit from "./UserInformationEdit/UserInformationEdit";
 
 const Loans = () => {
   const [activeTab, setActiveTab] = useState("request");
@@ -70,9 +72,9 @@ const Loans = () => {
           ) : activeTab === "status" ? (
             <LoanStatus />
           ) : activeTab === "history" ? (
-            "ঋণ ইতিহাস পৃষ্ঠা লোড হচ্ছে..."
+            <LoanHistory />
           ) : activeTab === "editUser" ? (
-            "ইউজার তথ্য সম্পাদনা পৃষ্ঠা লোড হচ্ছে..."
+            <UserInformationEdit />
           ) : activeTab === "nominee" ? (
             "মনোনীত ব্যক্তির তথ্য পৃষ্ঠা লোড হচ্ছে..."
           ) : activeTab === "bankInfo" ? (

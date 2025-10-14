@@ -44,7 +44,7 @@ const TextInput = ({
             required={required}
             {...(register ? register(id, validation) : {})}
             {...rest}
-            className={`block w-full ${Icon ? "pl-10" : "pl-3"} border ${
+            className={`block w-full ${Icon ? "pl-10" : "pl-3"} border bg-white ${
               error ? "border-red-500" : "border-gray-300"
             } rounded-md shadow-sm py-3 pr-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
           >
@@ -69,7 +69,7 @@ const TextInput = ({
             rows={rows}
             {...(register ? register(id, validation) : {})}
             {...rest}
-            className={`block w-full ${Icon ? "pl-10" : "pl-3"} border ${
+            className={`block w-full ${Icon ? "pl-10" : "pl-3"} border bg-white ${
               error ? "border-red-500" : "border-gray-300"
             } rounded-md shadow-sm py-3 pr-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
           ></textarea>
@@ -81,7 +81,7 @@ const TextInput = ({
             required={required}
             {...(register ? register(id, validation) : {})}
             {...rest}
-            className={`block w-full ${Icon ? "pl-10" : "pl-3"} pr-3 border ${
+            className={`block w-full ${Icon ? "pl-10" : "pl-3"} pr-3 border bg-white ${
               error ? "border-red-500" : "border-gray-300"
             } rounded-md shadow-sm py-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
           />
