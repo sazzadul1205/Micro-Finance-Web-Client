@@ -10,6 +10,7 @@ import {
   FaUserCircle,
   FaUserFriends,
 } from "react-icons/fa";
+import { BiSolidErrorAlt } from "react-icons/bi";
 import { RiErrorWarningFill } from "react-icons/ri";
 
 // Packages
@@ -63,13 +64,13 @@ const NomineeInfo = () => {
       axiosPublic
         .get(`/NomineeInfo/NomineeInfoExistCheck/${user?.phone}`)
         .then((res) => res.data),
-    enabled: !!user?.phone, // only run if phone exists
+    enabled: !!user?.phone,
   });
 
   // Redirect if basic info already submitted
   useEffect(() => {
     if (!isLoading && NomineeInfoExistCheck?.nomineeInfoSubmitted) {
-      navigate("/BankInfo"); // redirect if nominee info already submitted
+      navigate("/BankInfo");
     }
   }, [NomineeInfoExistCheck, isLoading, navigate]);
 
@@ -159,167 +160,166 @@ const NomineeInfo = () => {
     }
   };
 
-  // Loading State
+  // Centered Loading
   if (isLoading)
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-purple-600"></div>
-        <span className="ml-3 text-purple-700 font-semibold">Loading...</span>
+      <div className="fixed inset-0 flex flex-col justify-center items-center bg-white/80 z-50">
+        <div className="animate-spin rounded-full h-14 w-14 border-t-4 border-b-4 border-purple-600 mb-4"></div>
+        <span className="text-purple-700 font-semibold text-lg">
+          Loading, please wait...
+        </span>
       </div>
     );
 
-  // Error State
-  if (error) {
+  // Centered Error
+  if (error)
     return (
-      <div className="flex flex-col items-center justify-center h-64 bg-red-50 rounded-lg p-6 border border-red-300">
-        <p className="text-red-600 font-semibold text-lg mb-2">
+      <div className="fixed inset-0 flex flex-col justify-center items-center bg-red-50 text-center border-t border-red-200 z-50">
+        <BiSolidErrorAlt className="text-red-500 text-8xl mb-3" />
+        <p className="text-red-600 font-bold text-xl mb-2">
           Oops! Something went wrong.
         </p>
-        <p className="text-red-500 text-sm">
+        <p className="text-red-500 text-base max-w-md">
           {error?.message || "Unable to load data. Please try again later."}
         </p>
       </div>
     );
-  }
 
   return (
-    <div className="mx-auto max-w-4xl shadow-2xl rounded-md p-4">
-      <div className="py-4 rounded-2xl my-4">
-        {/* Header */}
-        <div className="flex items-center gap-4 bg-blue-500 py-3 px-5 rounded-2xl text-white">
-          <FaUser className="text-3xl" />
-          <h3 className="font-semibold text-2xl">নমিনীর তথ্য</h3>
-        </div>
-
-        {/* Warning */}
-        <div className="flex items-center gap-4 py-3 rounded-2xl text-black">
-          <RiErrorWarningFill className="text-3xl text-blue-500" />
-          <p>
-            আপনার মনোনীত ব্যক্তির তথ্য দিন (যিনি আপনার অনুপস্থিতিতে দায়িত্ব
-            পালন করবেন)
-          </p>
-        </div>
-
-        {/* Horizontal Line */}
-        <p className="bg-gray-400 h-[1px] w-[99%] mx-auto my-1" />
-
-        {/* Form */}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="text-black space-y-6"
-        >
-          {/* Nominee Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5 space-y-3">
-            {/* Nominee Name */}
-            <TextInput
-              label="নমিনীর নাম"
-              id="nominee_name"
-              icon={FaUser}
-              required
-              placeholder="আপনার নমিনীর নাম লিখুন"
-              register={register}
-              validation={{ required: "নমিনীর নাম আবশ্যক" }}
-              error={errors.nominee_name}
-            />
-
-            {/* Nominee Phone */}
-            <TextInput
-              label="নমিনীর ফোন নম্বর"
-              id="nominee_phone"
-              icon={FaPhone}
-              required
-              placeholder="আপনার নমিনীর ফোন নম্বর লিখুন"
-              register={register}
-              validation={{ required: "নমিনীর ফোন নম্বর আবশ্যক" }}
-              error={errors.nominee_phone}
-            />
-
-            {/* Relation */}
-            <TextInput
-              label="সম্পর্ক"
-              id="relation"
-              icon={FaUserFriends}
-              select
-              selectPlaceholder="সম্পর্ক নির্বাচন করুন"
-              required
-              options={[
-                { value: "father", label: "পিতা" },
-                { value: "mother", label: "মাতা" },
-                { value: "brother", label: "ভাই" },
-                { value: "sister", label: "বোন" },
-                { value: "spouse", label: "স্বামী/স্ত্রী" },
-                { value: "other", label: "অন্যান্য" },
-              ]}
-              register={register}
-              validation={{ required: "সম্পর্ক আবশ্যক" }}
-              error={errors.relation}
-            />
-
-            {/* Nominee NID */}
-            <TextInput
-              label="নমিনীর জাতীয় পরিচয়পত্র নম্বর"
-              id="nominee_nid"
-              icon={FaIdCard}
-              required
-              placeholder="নমিনীর জাতীয় পরিচয়পত্র নম্বর লিখুন"
-              register={register}
-              validation={{ required: "নমিনীর জাতীয় পরিচয়পত্র নম্বর আবশ্যক" }}
-              error={errors.nominee_nid}
-            />
-          </div>
-
-          {/* Attachments */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold text-gray-700 mb-1 flex items-center gap-2">
-              <FaPaperclip className="text-gray-500" />
-              এটাচমেন্ট বা কাগজপত্রসমূহ
-            </h3>
-
-            <FileUploadCard
-              label="নমিনির এনআইডি কার্ড সামনের দিক"
-              icon={FaIdCard}
-              multiple={false}
-              maxFiles={1}
-              accept={{ "image/*": [] }}
-              onChange={setNomineeNidFront}
-            />
-
-            <FileUploadCard
-              label="নমিনির এনআইডি কার্ড পিছনের দিক"
-              icon={FaIdCard}
-              multiple={false}
-              maxFiles={1}
-              accept={{ "image/*": [] }}
-              onChange={setNomineeNidBack}
-            />
-
-            <FileUploadCard
-              label="নমিনির পাসপোর্ট সাইজের ছবি"
-              icon={FaUserCircle}
-              multiple={false}
-              maxFiles={1}
-              accept={{ "image/*": [] }}
-              onChange={setNomineePassportPhoto}
-            />
-          </div>
-
-          {/* Submit Button */}
-
-          <div className="flex pt-4">
-            <button
-              type="submit"
-              className={`w-full py-2 px-4 rounded text-white font-semibold transition-colors cursor-pointer ${
-                loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-green-500 hover:bg-green-600"
-              }`}
-              disabled={loading}
-            >
-              {loading ? "জমা হচ্ছে..." : "সাবমিট করুন"}
-            </button>
-          </div>
-        </form>
+    <div className="mx-auto max-w-4xl bg-white shadow-2xl rounded-2xl p-2 md:p-10">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-4 bg-blue-500 py-3 px-4 sm:px-5 rounded-2xl text-white">
+        <FaUser className="text-2xl sm:text-3xl" />
+        <h3 className="font-semibold text-xl sm:text-2xl text-center sm:text-left">
+          নমিনীর তথ্য
+        </h3>
       </div>
+
+      {/* Warning */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 py-3 px-4 sm:px-5 rounded-2xl text-black">
+        <RiErrorWarningFill className="text-2xl sm:text-3xl text-blue-500" />
+        <p className="text-sm sm:text-base">
+          আপনার মনোনীত ব্যক্তির তথ্য দিন (যিনি আপনার অনুপস্থিতিতে দায়িত্ব পালন
+          করবেন)
+        </p>
+      </div>
+
+      {/* Horizontal Line */}
+      <p className="bg-gray-400 h-[1px] w-[99%] mx-auto my-1" />
+
+      {/* Form */}
+      <form onSubmit={handleSubmit(onSubmit)} className="text-black space-y-6">
+        {/* Nominee Information */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5 space-y-3">
+          {/* Nominee Name */}
+          <TextInput
+            label="নমিনীর নাম"
+            id="nominee_name"
+            icon={FaUser}
+            required
+            placeholder="আপনার নমিনীর নাম লিখুন"
+            register={register}
+            validation={{ required: "নমিনীর নাম আবশ্যক" }}
+            error={errors.nominee_name}
+          />
+
+          {/* Nominee Phone */}
+          <TextInput
+            label="নমিনীর ফোন নম্বর"
+            id="nominee_phone"
+            icon={FaPhone}
+            required
+            placeholder="আপনার নমিনীর ফোন নম্বর লিখুন"
+            register={register}
+            validation={{ required: "নমিনীর ফোন নম্বর আবশ্যক" }}
+            error={errors.nominee_phone}
+          />
+
+          {/* Relation */}
+          <TextInput
+            label="সম্পর্ক"
+            id="relation"
+            icon={FaUserFriends}
+            select
+            selectPlaceholder="সম্পর্ক নির্বাচন করুন"
+            required
+            options={[
+              { value: "father", label: "পিতা" },
+              { value: "mother", label: "মাতা" },
+              { value: "brother", label: "ভাই" },
+              { value: "sister", label: "বোন" },
+              { value: "spouse", label: "স্বামী/স্ত্রী" },
+              { value: "other", label: "অন্যান্য" },
+            ]}
+            register={register}
+            validation={{ required: "সম্পর্ক আবশ্যক" }}
+            error={errors.relation}
+          />
+
+          {/* Nominee NID */}
+          <TextInput
+            label="নমিনীর জাতীয় পরিচয়পত্র নম্বর"
+            id="nominee_nid"
+            icon={FaIdCard}
+            required
+            placeholder="নমিনীর জাতীয় পরিচয়পত্র নম্বর লিখুন"
+            register={register}
+            validation={{ required: "নমিনীর জাতীয় পরিচয়পত্র নম্বর আবশ্যক" }}
+            error={errors.nominee_nid}
+          />
+        </div>
+
+        {/* Attachments */}
+        <div className="space-y-6">
+          <h3 className="text-xl font-semibold text-gray-700 mb-1 flex items-center gap-2">
+            <FaPaperclip className="text-gray-500" />
+            এটাচমেন্ট বা কাগজপত্রসমূহ
+          </h3>
+
+          <FileUploadCard
+            label="নমিনির এনআইডি কার্ড সামনের দিক"
+            icon={FaIdCard}
+            multiple={false}
+            maxFiles={1}
+            accept={{ "image/*": [] }}
+            onChange={setNomineeNidFront}
+          />
+
+          <FileUploadCard
+            label="নমিনির এনআইডি কার্ড পিছনের দিক"
+            icon={FaIdCard}
+            multiple={false}
+            maxFiles={1}
+            accept={{ "image/*": [] }}
+            onChange={setNomineeNidBack}
+          />
+
+          <FileUploadCard
+            label="নমিনির পাসপোর্ট সাইজের ছবি"
+            icon={FaUserCircle}
+            multiple={false}
+            maxFiles={1}
+            accept={{ "image/*": [] }}
+            onChange={setNomineePassportPhoto}
+          />
+        </div>
+
+        {/* Submit Button */}
+
+        <div className="flex pt-4">
+          <button
+            type="submit"
+            className={`w-full py-2 px-4 rounded text-white font-semibold transition-colors cursor-pointer ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-500 hover:bg-green-600"
+            }`}
+            disabled={loading}
+          >
+            {loading ? "জমা হচ্ছে..." : "সাবমিট করুন"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

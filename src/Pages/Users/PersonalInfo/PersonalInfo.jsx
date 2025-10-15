@@ -14,6 +14,7 @@ import {
   FaUserCircle,
   FaUserTie,
 } from "react-icons/fa";
+import { BiSolidErrorAlt } from "react-icons/bi";
 
 // Packages
 import axios from "axios";
@@ -31,7 +32,7 @@ import FileUploadCard from "../../../Shared/FileUploadCard";
 
 // Hooks
 import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
-import { BiSolidErrorAlt } from "react-icons/bi";
+
 
 // Image Uploader
 const Image_Hosting_Key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
@@ -78,7 +79,7 @@ const PersonalInfo = () => {
   // Redirect if basic info already submitted
   useEffect(() => {
     if (!isLoading && UserBasicInfoExistCheck?.basicInfoSubmitted) {
-      navigate("/NomineeInfo"); // redirect if basic info already submitted
+      navigate("/NomineeInfo");
     }
   }, [UserBasicInfoExistCheck, isLoading, navigate]);
 
