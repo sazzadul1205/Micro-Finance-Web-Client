@@ -127,7 +127,7 @@ const SignUp = () => {
       <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-indigo-500/40 rounded-full blur-[120px]" />
       <div className="absolute bottom-[-100px] right-[-100px] w-[400px] h-[400px] bg-indigo-500/40 rounded-full blur-[120px]" />
 
-      <div className="z-10 w-full max-w-md p-6 backdrop-blur-md bg-white/5 rounded-2xl border border-white/10 shadow-lg flex flex-col items-center animate-fadeIn">
+      <div className="z-10 w-full max-w-md px-2 py-6 md:px-6 md:py-6 backdrop-blur-md bg-white/5 rounded-2xl border border-white/10 shadow-lg flex flex-col items-center animate-fadeIn">
         {/* Logo */}
         <div className="mb-4">
           <img
@@ -138,7 +138,7 @@ const SignUp = () => {
         </div>
 
         {/* Title */}
-        <h2 className="text-white text-2xl font-bold mb-1">
+        <h2 className="text-white text-xl md:text-2xl font-bold mb-1">
           নতুন অ্যাকাউন্ট তৈরি করুন
         </h2>
 
@@ -200,7 +200,7 @@ const SignUp = () => {
             </p>
           )}
 
-          {/* Password */}
+          {/* Password Field */}
           <div className="relative flex items-center bg-white/10 rounded-xl p-3 mb-4 w-full focus-within:ring-2 focus-within:ring-indigo-500">
             {/* Icon */}
             <FaLock className="text-slate-400 mr-3" />
@@ -216,8 +216,21 @@ const SignUp = () => {
                   message: "Password must be at least 6 characters",
                 },
               })}
-              className="bg-transparent outline-none text-white w-full placeholder-slate-400"
+              className="bg-transparent outline-none text-white w-full placeholder-slate-400 pr-8"
+              onCopy={(e) => e.preventDefault()}
+              onCut={(e) => e.preventDefault()}
+              onPaste={(e) => e.preventDefault()}
+              onDragStart={(e) => e.preventDefault()}
             />
+
+            {/* Eye Icon */}
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-4 text-slate-300 hover:text-white transition"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
 
           {/* Password Error */}
@@ -227,7 +240,7 @@ const SignUp = () => {
             </p>
           )}
 
-          {/* Confirm Password */}
+          {/* Confirm Password Field */}
           <div className="relative flex items-center bg-white/10 rounded-xl p-3 mb-6 w-full focus-within:ring-2 focus-within:ring-indigo-500">
             {/* Icon */}
             <FaLock className="text-slate-400 mr-3" />
@@ -239,8 +252,21 @@ const SignUp = () => {
               {...register("confirmPassword", {
                 required: "Please confirm your password",
               })}
-              className="bg-transparent outline-none text-white w-full placeholder-slate-400"
+              className="bg-transparent outline-none text-white w-full placeholder-slate-400 pr-8"
+              onCopy={(e) => e.preventDefault()}
+              onCut={(e) => e.preventDefault()}
+              onPaste={(e) => e.preventDefault()}
+              onDragStart={(e) => e.preventDefault()}
             />
+
+            {/* Eye Icon */}
+            <button
+              type="button"
+              onClick={() => setShowConfirm((prev) => !prev)}
+              className="absolute right-4 text-slate-300 hover:text-white transition"
+            >
+              {showConfirm ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
 
           {/* Confirm Password Error */}
@@ -267,9 +293,12 @@ const SignUp = () => {
         </form>
 
         {/* Already have an account */}
-        <p className="text-slate-300 text-sm">
-          ইতিমধ্যেই একটি অ্যাকাউন্ট আছে?{" "}
-          <a href="/" className="text-purple-400 font-semibold hover:underline">
+        <p className="text-slate-300 text-sm sm:text-base text-center leading-relaxed flex flex-wrap justify-center gap-1">
+          <span>ইতিমধ্যেই একটি অ্যাকাউন্ট আছে?</span>
+          <a
+            href="/"
+            className="text-purple-400 font-semibold hover:underline whitespace-nowrap"
+          >
             সাইন ইন করুন
           </a>
         </p>

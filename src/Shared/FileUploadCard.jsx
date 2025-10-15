@@ -2,7 +2,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import PropTypes from "prop-types";
-
 import { ImCross } from "react-icons/im";
 
 const FileUploadCard = ({
@@ -12,13 +11,13 @@ const FileUploadCard = ({
   accept = { "image/*": [], "application/pdf": [] },
   maxFiles = 1,
   onChange,
-  initialFiles = [], // URLs or File objects
+  initialFiles = [],
   validate,
 }) => {
   const [files, setFiles] = useState([]);
   const [error, setError] = useState("");
 
-  // Initialize with initial files (preloaded URLs or File objects)
+  // Initialize with initial files (URLs or File objects)
   useEffect(() => {
     if (initialFiles.length > 0) {
       const mapped = initialFiles.map((f) =>
@@ -48,7 +47,7 @@ const FileUploadCard = ({
         : mapped.slice(0, 1);
 
       setFiles(updatedFiles);
-      setError(""); // clear error
+      setError("");
       onChange?.(updatedFiles);
     },
     [files, multiple, maxFiles, onChange]
@@ -68,7 +67,7 @@ const FileUploadCard = ({
     onChange?.(updated);
   };
 
-  // Clean up object URLs for local files
+  // Cleanup URLs for local files
   useEffect(() => {
     return () => {
       files.forEach((f) => {
@@ -77,7 +76,7 @@ const FileUploadCard = ({
     };
   }, [files]);
 
-  // Validation function you can call manually
+  // Manual validation
   const checkValid = () => {
     if (validate) {
       const result = validate(files);
@@ -93,59 +92,67 @@ const FileUploadCard = ({
   };
 
   return (
-    <div
-      {...getRootProps()}
-      className={`border-4 border-dashed rounded-md p-6 my-4 flex flex-col items-center justify-center
-        transition-all duration-300 cursor-pointer
-        ${
-          isDragActive
-            ? "border-purple-500 bg-purple-50"
-            : "border-gray-300 bg-white"
-        }
-        hover:border-purple-500 hover:bg-purple-50`}
-    >
-      <input {...getInputProps()} />
+    <div className="w-full">
+      <div
+        {...getRootProps()}
+        className={`border-4 border-dashed rounded-md p-6 my-4 flex flex-col items-center justify-center text-center
+          transition-all duration-300 cursor-pointer
+          ${
+            isDragActive
+              ? "border-purple-500 bg-purple-50"
+              : "border-gray-300 bg-white"
+          }
+          hover:border-purple-500 hover:bg-purple-50`}
+      >
+        <input {...getInputProps()} />
 
-      {!files.length ? (
-        <div className="flex flex-col items-center space-y-4 text-center">
-          {Icon && <Icon className="text-6xl text-gray-400" />}
-          <h3 className="text-xl font-semibold text-gray-700">{label}</h3>
-          <p className="text-gray-500 text-sm">
-            ফাইল এখানে টেনে আনুন অথবা ক্লিক করে নির্বাচন করুন{" "}
-            {multiple ? "গুলো" : ""}
-          </p>
-        </div>
-      ) : (
-        <div className="w-full flex flex-wrap justify-center gap-4">
-          {files.map((file, index) => (
-            <div
-              key={index}
-              className="relative border rounded-md overflow-hidden shadow-sm p-2 flex flex-col items-center justify-center bg-white"
-              style={{ width: "250px" }}
-            >
-              {file.preview && (
-                <img
-                  src={file.preview}
-                  alt={file.name}
-                  className="w-full h-40 object-contain rounded-md"
-                />
-              )}
-              <p className="text-gray-700 mt-2 truncate text-center w-full">
-                {file.name}
-              </p>
-              <button
-                type="button"
-                onClick={() => removeFile(index)}
-                className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 transition-colors cursor-pointer"
+        {/* --- When No Files Selected --- */}
+        {!files.length ? (
+          <div className="flex flex-col items-center space-y-4 text-center px-4">
+            {Icon && <Icon className="text-6xl text-gray-400" />}
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-700 break-words">
+              {label}
+            </h3>
+            <p className="text-gray-500 text-sm sm:text-base">
+              ফাইল এখানে টেনে আনুন অথবা ক্লিক করে নির্বাচন করুন{" "}
+              {multiple ? "গুলো" : ""}
+            </p>
+          </div>
+        ) : (
+          /* --- File Previews --- */
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+            {files.map((file, index) => (
+              <div
+                key={index}
+                className="relative border rounded-md overflow-hidden shadow-sm p-2 flex flex-col items-center justify-center bg-white"
               >
-                <ImCross />
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
+                {file.preview && (
+                  <img
+                    src={file.preview}
+                    alt={file.name}
+                    className="w-full h-36 sm:h-40 object-contain rounded-md"
+                  />
+                )}
+                <p className="text-gray-700 mt-2 truncate text-center w-full text-sm sm:text-base">
+                  {file.name}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => removeFile(index)}
+                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 transition-colors cursor-pointer"
+                >
+                  <ImCross size={10} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {/* Error Message */}
+      {error && (
+        <p className="mt-2 text-sm text-red-600 text-center">{error}</p>
+      )}
     </div>
   );
 };
@@ -157,7 +164,7 @@ FileUploadCard.propTypes = {
   accept: PropTypes.object,
   maxFiles: PropTypes.number,
   onChange: PropTypes.func,
-  initialFiles: PropTypes.array, // URLs or File objects
+  initialFiles: PropTypes.array,
   validate: PropTypes.func,
 };
 

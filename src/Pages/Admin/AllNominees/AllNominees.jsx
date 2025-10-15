@@ -126,34 +126,49 @@ const AllNominees = () => {
         All Nominees
       </h1>
 
-      {/* --- Filters --- */}
+      {/*  Filters  */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-5 gap-3">
         {/* Search Input */}
-        <input
-          type="text"
-          placeholder="Search by name or phone..."
-          className="w-full md:w-1/3 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div className="flex flex-col w-full md:w-1/3">
+          <label htmlFor="search" className="mb-1 font-semibold text-gray-700">
+            Search by Name or Phone
+          </label>
+          <input
+            id="search"
+            type="text"
+            placeholder="Enter name or phone..."
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
 
         {/* Relation Filter */}
-        <select
-          className="w-full md:w-1/4 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
-          value={selectedRelation}
-          onChange={(e) => setSelectedRelation(e.target.value)}
-        >
-          <option value="">All Relations</option>
-          <option value="father">Father</option>
-          <option value="mother">Mother</option>
-          <option value="brother">Brother</option>
-          <option value="sister">Sister</option>
-          <option value="spouse">Spouse</option>
-          <option value="other">Other</option>
-        </select>
+        <div className="flex flex-col w-full md:w-1/4">
+          <label
+            htmlFor="relation"
+            className="mb-1 font-semibold text-gray-700"
+          >
+            Filter by Relation
+          </label>
+          <select
+            id="relation"
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+            value={selectedRelation}
+            onChange={(e) => setSelectedRelation(e.target.value)}
+          >
+            <option value="">All Relations</option>
+            <option value="father">Father</option>
+            <option value="mother">Mother</option>
+            <option value="brother">Brother</option>
+            <option value="sister">Sister</option>
+            <option value="spouse">Spouse</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
       </div>
 
-      {/* --- Table --- */}
+      {/*  Table  */}
       <div className="overflow-x-auto w-full rounded-lg shadow-lg border border-gray-200">
         <table className="table w-full">
           {/* Table Header */}
@@ -177,15 +192,29 @@ const AllNominees = () => {
                   key={nominee._id}
                   className="hover:bg-purple-50 transition-colors duration-200"
                 >
+                  {/* Index */}
                   <td className="text-center font-medium">{index + 1}</td>
+
+                  {/* User Name */}
                   <td className="font-semibold">
                     <NumberName phone={nominee?.user_phone} />
                   </td>
+
+                  {/* Nominee Name */}
                   <td className="font-semibold">{nominee.nominee_name}</td>
+
+                  {/* Phone */}
                   <td>{nominee.nominee_phone}</td>
+
+                  {/* Relation */}
                   <td>{nominee.relation}</td>
+
+                  {/* NID */}
                   <td>{nominee.nominee_nid}</td>
+
+                  {/* Actions */}
                   <td className="flex justify-center gap-2">
+                    {/* Details Button */}
                     <button
                       onClick={() => {
                         setSelectedUser(nominee);
@@ -198,6 +227,8 @@ const AllNominees = () => {
                     >
                       <FaInfoCircle /> Details
                     </button>
+
+                    {/* Delete Button */}
                     <button
                       onClick={() => handleDelete(nominee?._id)}
                       className=" flex items-center gap-2 px-5 py-2 text-md bg-red-500 text-white rounded-lg 
@@ -209,6 +240,7 @@ const AllNominees = () => {
                 </tr>
               ))
             ) : (
+              // No nominees found
               <tr>
                 <td
                   colSpan="5"
@@ -222,8 +254,8 @@ const AllNominees = () => {
         </table>
       </div>
 
-      {/* ---------- Modals ---------- */}
-      {/* --------- User Details Modal --------- */}
+      {/* ----- Modals ----- */}
+      {/*  ----- User Details Modal -----  */}
       <dialog id="Nominee_Details_Modal" className="modal">
         <NomineeDetailsModal
           selectedUser={selectedUser}

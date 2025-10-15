@@ -25,7 +25,7 @@ const AdminLayout = () => {
       path: "/Admin/LoanManagement",
       icon: <FaMoneyCheckAlt />,
     },
-    { name: "Settings", path: "/Admin/Settings", icon: <FaCogs /> },
+    // { name: "Settings", path: "/Admin/Settings", icon: <FaCogs /> },
   ];
 
   return (

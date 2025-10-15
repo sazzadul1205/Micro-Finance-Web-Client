@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 
 // Icons
-import { FaPhoneAlt, FaLock } from "react-icons/fa";
+import { FaPhoneAlt, FaLock, FaEyeSlash, FaEye } from "react-icons/fa";
 
 // Hooks
 import useAxiosPublic from "../../../Hooks/useAxiosPublic";
@@ -15,6 +15,9 @@ const Login = () => {
 
   // Inside your component
   const [loading, setLoading] = useState(false);
+
+  // Password Visible State
+  const [showPassword, setShowPassword] = useState(false);
 
   // Handle submit
   const {
@@ -95,7 +98,8 @@ const Login = () => {
       <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-indigo-500/40 rounded-full blur-[120px]" />
       <div className="absolute bottom-[-100px] right-[-100px] w-[400px] h-[400px] bg-indigo-500/40 rounded-full blur-[120px]" />
 
-      <div className="z-10 w-full max-w-md p-6 backdrop-blur-md bg-white/5 rounded-2xl border border-white/10 shadow-lg flex flex-col items-center animate-fadeIn">
+      <div className="z-10 w-full max-w-md px-2 py-6 md:px-6 md:py-6 backdrop-blur-md bg-white/5 rounded-2xl border border-white/10 shadow-lg flex flex-col items-center animate-fadeIn">
+        {/* Logo */}
         <div className="mb-4">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/0/04/World_Bank_logo.svg"
@@ -104,7 +108,10 @@ const Login = () => {
           />
         </div>
 
+        {/* Title */}
         <h2 className="text-white text-2xl font-bold mb-1">আপনাকে স্বাগতম</h2>
+
+        {/* Description */}
         <p className="text-slate-300 text-sm mb-6 text-center">
           আপনার অ্যাকাউন্টে প্রবেশ করতে লগইন করুন
         </p>
@@ -146,19 +153,33 @@ const Login = () => {
             {/* Icon */}
             <FaLock className="text-slate-400 mr-3" />
 
-            {/* Input */}
-            <input
-              type="password"
-              placeholder="আপনার পাসওয়ার্ড লিখুন"
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
-                },
-              })}
-              className="bg-transparent outline-none text-white w-full placeholder-slate-400"
-            />
+            {/* Password Input */}
+            <div className="relative w-full">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="আপনার পাসওয়ার্ড লিখুন"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                })}
+                className="bg-transparent outline-none text-white w-full placeholder-slate-400 pr-10"
+                style={{
+                  WebkitTextSecurity: showPassword ? "none" : "disc", // hides default toggle in some browsers
+                }}
+              />
+
+              {/* Eye Icon */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-white hover:text-purple-300 cursor-pointer"
+              >
+                {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+              </button>
+            </div>
           </div>
 
           {/* Error message */}

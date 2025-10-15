@@ -31,6 +31,7 @@ import FileUploadCard from "../../../Shared/FileUploadCard";
 
 // Hooks
 import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
+import { BiSolidErrorAlt } from "react-icons/bi";
 
 // Image Uploader
 const Image_Hosting_Key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
@@ -161,163 +162,170 @@ const PersonalInfo = () => {
     }
   };
 
-  // Loading State
+  // Centered Loading
   if (isLoading)
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-purple-600"></div>
-        <span className="ml-3 text-purple-700 font-semibold">Loading...</span>
+      <div className="fixed inset-0 flex flex-col justify-center items-center bg-white/80 z-50">
+        <div className="animate-spin rounded-full h-14 w-14 border-t-4 border-b-4 border-purple-600 mb-4"></div>
+        <span className="text-purple-700 font-semibold text-lg">
+          Loading, please wait...
+        </span>
       </div>
     );
 
-  // Error State
-  if (error) {
+  // Centered Error
+  if (error)
     return (
-      <div className="flex flex-col items-center justify-center h-64 bg-red-50 rounded-lg p-6 border border-red-300">
-        <p className="text-red-600 font-semibold text-lg mb-2">
+      <div className="fixed inset-0 flex flex-col justify-center items-center bg-red-50 text-center border-t border-red-200 z-50">
+        <BiSolidErrorAlt className="text-red-500 text-8xl mb-3" />
+        <p className="text-red-600 font-bold text-xl mb-2">
           Oops! Something went wrong.
         </p>
-        <p className="text-red-500 text-sm">
+        <p className="text-red-500 text-base max-w-md">
           {error?.message || "Unable to load data. Please try again later."}
         </p>
       </div>
     );
-  }
 
   return (
-    <div className="mx-auto max-w-4xl shadow-2xl rounded-md p-4">
-      <div className="py-4 rounded-2xl my-4">
-        {/* Header */}
-        <div className="flex items-center gap-4">
-          <img src={Loan} alt="Loan Icon" className="w-15" />
-          <div className="text-black">
-            <h3 className="font-semibold text-2xl">ঋণ আবেদন ফর্ম</h3>
-            <p>আপনার প্রয়োজনীয় ঋণের জন্য আবেদন করুন</p>
-          </div>
+    <div className="mx-auto max-w-4xl bg-white shadow-2xl rounded-2xl p-2 md:p-10">
+      {/* Header */}
+      <div className="flex flex-row items-center sm:items-start gap-4 text-left">
+        {/* Icon */}
+        <img src={Loan} alt="Loan Icon" className="w-16 sm:w-20" />
+
+        {/* Text */}
+        <div className="text-black">
+          <h3 className="font-semibold text-2xl sm:text-3xl">ঋণ আবেদন ফর্ম</h3>
+          <p className="text-sm sm:text-base text-gray-600">
+            আপনার প্রয়োজনীয় ঋণের জন্য আবেদন করুন
+          </p>
+        </div>
+      </div>
+
+      {/* Horizontal Line */}
+      <div className="bg-gray-300 h-[1px] w-full my-6" />
+
+      {/* Form Header */}
+      <div className="flex items-center gap-3 text-lg text-blue-600 mb-4">
+        <FaUser className="text-blue-500" />
+        <p className="text-black font-semibold">ব্যক্তিগত তথ্য</p>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit(onSubmit)} className="text-black space-y-6">
+        {/* Basic Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 space-y-3">
+          <TextInput
+            label="নাম"
+            id="name"
+            icon={FaUser}
+            required
+            placeholder="আপনার নাম লিখুন"
+            register={register}
+            validation={{ required: "নাম আবশ্যক" }}
+            error={errors.name}
+          />
+          <TextInput
+            label="পিতার নাম"
+            id="fathers_name"
+            icon={FaUserTie}
+            required
+            placeholder="আপনার পিতার নাম লিখুন"
+            register={register}
+            validation={{ required: "পিতার নাম আবশ্যক" }}
+            error={errors.fathers_name}
+          />
+          <TextInput
+            label="মায়ের নাম"
+            id="mothers_name"
+            icon={FaFemale}
+            required
+            placeholder="আপনার মায়ের নাম লিখুন"
+            register={register}
+            validation={{ required: "মায়ের নাম আবশ্যক" }}
+            error={errors.mothers_name}
+          />
+          <TextInput
+            label="জাতীয় পরিচয়পত্র নম্বর"
+            id="nid_number"
+            icon={FaIdCard}
+            required
+            placeholder="আপনার জাতীয় পরিচয়পত্র নম্বর লিখুন"
+            register={register}
+            validation={{ required: "জাতীয় পরিচয়পত্র নম্বর আবশ্যক" }}
+            error={errors.nid_number}
+          />
         </div>
 
-        {/* Horizontal Line */}
-        <p className="bg-black h-[1px] w-[99%] mx-auto my-6" />
+        {/* Blood Group */}
+        <TextInput
+          label="রক্তের গ্রুপ"
+          id="blood_group"
+          icon={FaTint}
+          select
+          selectPlaceholder="রক্তের গ্রুপ নির্বাচন করুন"
+          required
+          options={[
+            { value: "A+", label: "A+" },
+            { value: "A-", label: "A-" },
+            { value: "B+", label: "B+" },
+            { value: "B-", label: "B-" },
+            { value: "AB+", label: "AB+" },
+            { value: "AB-", label: "AB-" },
+            { value: "O+", label: "O+" },
+            { value: "O-", label: "O-" },
+          ]}
+          register={register}
+          validation={{ required: "রক্তের গ্রুপ আবশ্যক" }}
+          error={errors.blood_group}
+        />
 
-        {/* Form Header */}
-        <div className="flex items-center gap-5 text-lg text-blue-500">
-          <FaUser />
-          <p className="text-black font-semibold">ব্যক্তিগত তথ্য</p>
-        </div>
+        {/* Addresses */}
+        <TextInput
+          label="স্থায়ী ঠিকানা"
+          id="permanent_address"
+          icon={FaHome}
+          placeholder="আপনার স্থায়ী ঠিকানা লিখুন"
+          textarea
+          required
+          register={register}
+          validation={{ required: "স্থায়ী ঠিকানা আবশ্যক" }}
+          error={errors.permanent_address}
+        />
 
-        {/* Form */}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="text-black space-y-6"
-        >
-          {/* Basic Info */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
-            <TextInput
-              label="নাম"
-              id="name"
-              icon={FaUser}
-              required
-              placeholder="আপনার নাম লিখুন"
-              register={register}
-              validation={{ required: "নাম আবশ্যক" }}
-              error={errors.name}
-            />
-            <TextInput
-              label="পিতার নাম"
-              id="fathers_name"
-              icon={FaUserTie}
-              required
-              placeholder="আপনার পিতার নাম লিখুন"
-              register={register}
-              validation={{ required: "পিতার নাম আবশ্যক" }}
-              error={errors.fathers_name}
-            />
-            <TextInput
-              label="মায়ের নাম"
-              id="mothers_name"
-              icon={FaFemale}
-              required
-              placeholder="আপনার মায়ের নাম লিখুন"
-              register={register}
-              validation={{ required: "মায়ের নাম আবশ্যক" }}
-              error={errors.mothers_name}
-            />
-            <TextInput
-              label="জাতীয় পরিচয়পত্র নম্বর"
-              id="nid_number"
-              icon={FaIdCard}
-              required
-              placeholder="আপনার জাতীয় পরিচয়পত্র নম্বর লিখুন"
-              register={register}
-              validation={{ required: "জাতীয় পরিচয়পত্র নম্বর আবশ্যক" }}
-              error={errors.nid_number}
-            />
-          </div>
+        <TextInput
+          label="অস্থায়ী ঠিকানা"
+          id="temporary_address"
+          icon={FaMapMarkerAlt}
+          placeholder="আপনার অস্থায়ী ঠিকানা লিখুন"
+          textarea
+          required
+          register={register}
+          validation={{ required: "অস্থায়ী ঠিকানা আবশ্যক" }}
+          error={errors.temporary_address}
+        />
 
-          <TextInput
-            label="রক্তের গ্রুপ"
-            id="blood_group"
-            icon={FaTint}
-            select
-            selectPlaceholder="রক্তের গ্রুপ নির্বাচন করুন"
-            required
-            options={[
-              { value: "A+", label: "A+" },
-              { value: "A-", label: "A-" },
-              { value: "B+", label: "B+" },
-              { value: "B-", label: "B-" },
-              { value: "AB+", label: "AB+" },
-              { value: "AB-", label: "AB-" },
-              { value: "O+", label: "O+" },
-              { value: "O-", label: "O-" },
-            ]}
-            register={register}
-            validation={{ required: "রক্তের গ্রুপ আবশ্যক" }}
-            error={errors.blood_group}
-          />
+        {/* Profession */}
+        <TextInput
+          label="পেশা"
+          id="job"
+          icon={FaBriefcase}
+          placeholder="আপনার পেশা লিখুন"
+          required
+          register={register}
+          validation={{ required: "আপনার পেশা আবশ্যক" }}
+          error={errors.job}
+        />
 
-          <TextInput
-            label="স্থায়ী ঠিকানা"
-            id="permanent_address"
-            icon={FaHome}
-            placeholder="আপনার স্থায়ী ঠিকানা লিখুন"
-            textarea
-            required
-            register={register}
-            validation={{ required: "স্থায়ী ঠিকানা আবশ্যক" }}
-            error={errors.permanent_address}
-          />
+        {/* Attachments */}
+        <div className="space-y-6">
+          <h3 className="text-xl font-semibold text-gray-700 mb-2 flex items-center gap-2">
+            <FaPaperclip className="text-gray-500" />
+            এটাচমেন্ট বা কাগজপত্রসমূহ
+          </h3>
 
-          <TextInput
-            label="অস্থায়ী ঠিকানা"
-            id="temporary_address"
-            icon={FaMapMarkerAlt}
-            placeholder="আপনার অস্থায়ী ঠিকানা লিখুন"
-            textarea
-            required
-            register={register}
-            validation={{ required: "অস্থায়ী ঠিকানা আবশ্যক" }}
-            error={errors.temporary_address}
-          />
-
-          <TextInput
-            label="পেশা"
-            id="job"
-            icon={FaBriefcase}
-            placeholder="আপনার পেশা লিখুন"
-            required
-            register={register}
-            validation={{ required: "আপনার পেশা আবশ্যক" }}
-            error={errors.job}
-          />
-
-          {/* Attachments */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold text-gray-700 mb-1 flex items-center gap-2">
-              <FaPaperclip className="text-gray-500" />
-              এটাচমেন্ট বা কাগজপত্রসমূহ
-            </h3>
-
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <FileUploadCard
               label="এনআইডি কার্ড সামনের দিক"
               icon={FaIdCard}
@@ -326,7 +334,6 @@ const PersonalInfo = () => {
               accept={{ "image/*": [] }}
               onChange={setNidFront}
             />
-
             <FileUploadCard
               label="এনআইডি কার্ড পিছনের দিক"
               icon={FaIdCard}
@@ -335,7 +342,6 @@ const PersonalInfo = () => {
               accept={{ "image/*": [] }}
               onChange={setNidBack}
             />
-
             <FileUploadCard
               label="পাসপোর্ট সাইজের ছবি"
               icon={FaUserCircle}
@@ -344,27 +350,25 @@ const PersonalInfo = () => {
               accept={{ "image/*": [] }}
               onChange={setPassportPhoto}
             />
-
-            {/* SignaturePad returns a Blob now */}
             <SignaturePad label="দস্তখত দিন" required onChange={setSignature} />
           </div>
+        </div>
 
-          {/* Submit */}
-          <div className="flex pt-4">
-            <button
-              type="submit"
-              className={`w-full py-2 px-4 rounded text-white font-semibold transition-colors ${
-                loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-green-500 hover:bg-green-600"
-              }`}
-              disabled={loading}
-            >
-              {loading ? "জমা হচ্ছে..." : "সাবমিট করুন"}
-            </button>
-          </div>
-        </form>
-      </div>
+        {/* Submit */}
+        <div className="flex pt-4">
+          <button
+            type="submit"
+            className={`w-full py-3 px-6 rounded-lg text-white font-semibold transition-colors duration-300 ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700"
+            }`}
+            disabled={loading}
+          >
+            {loading ? "জমা হচ্ছে..." : "সাবমিট করুন"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

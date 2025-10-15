@@ -36,16 +36,16 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-full py-4 px-6 bg-gradient-to-r from-purple-600 to-indigo-600 shadow-md flex justify-between items-center">
+    <nav className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 shadow-md px-5 md:px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-center md:text-left">
       {/* Title */}
-      <div className="text-white text-xl font-bold">
+      <div className="text-white text-lg md:text-2xl font-bold">
         Naziur Rojman Banking Website
       </div>
 
       {/* Logout Button */}
       <button
         onClick={handleLogout}
-        className="bg-white text-purple-600 font-semibold px-10 py-2 rounded-xl hover:bg-gray-200 transition-transform duration-200 shadow-md hover:shadow-2xl cursor-pointer"
+        className="bg-white text-purple-600 font-semibold px-8 py-2 rounded-xl hover:bg-gray-200 transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer w-full md:w-auto"
       >
         লগ আউট
       </button>
