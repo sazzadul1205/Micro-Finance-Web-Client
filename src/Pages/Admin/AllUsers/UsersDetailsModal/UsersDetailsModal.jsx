@@ -33,7 +33,7 @@ const UsersDetailsModal = ({ selectedUser, setSelectedUser }) => {
   return (
     <div
       id="Users_Details_Modal"
-      className="modal-box relative bg-white rounded-lg shadow-xl hover:shadow-2xl w-full max-w-full sm:max-w-xl md:max-w-3xl mx-auto max-h-[90vh] p-4 sm:p-6 text-black overflow-y-auto"
+      className="modal-box relative bg-white rounded-lg shadow-xl w-full max-w-full sm:max-w-xl md:max-w-3xl mx-auto max-h-[90vh] p-4 sm:p-6 text-black overflow-y-auto"
     >
       {/* Header */}
       <div>
@@ -53,64 +53,95 @@ const UsersDetailsModal = ({ selectedUser, setSelectedUser }) => {
       </div>
 
       {/* Divider */}
-      <div className="p-[1px] bg-purple-600 mb-4" />
+      <div className="h-[1px] bg-purple-600 mb-4" />
 
       {/* Basic Info */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-        <p>
-          <strong>Name:</strong> {name}
-        </p>
-        <p>
-          <strong>Phone:</strong> {phone}
-        </p>
-        <p>
-          <strong>Blood Group:</strong> {blood_group}
-        </p>
-        <p>
-          <strong>Job:</strong> {job}
-        </p>
-        <p>
-          <strong>Father’s Name:</strong> {fathers_name}
-        </p>
-        <p>
-          <strong>Mother’s Name:</strong> {mothers_name}
-        </p>
-        <p>
-          <strong>NID Number:</strong> {nid_number}
-        </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+          <p className="text-sm text-gray-600">
+            <strong>Name:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">{name}</p>
+        </div>
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+          <p className="text-sm text-gray-600">
+            <strong>Phone:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">{phone}</p>
+        </div>
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+          <p className="text-sm text-gray-600">
+            <strong>Blood Group:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">{blood_group}</p>
+        </div>
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+          <p className="text-sm text-gray-600">
+            <strong>Job:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">{job}</p>
+        </div>
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+          <p className="text-sm text-gray-600">
+            <strong>Father’s Name:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">
+            {fathers_name}
+          </p>
+        </div>
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+          <p className="text-sm text-gray-600">
+            <strong>Mother’s Name:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">
+            {mothers_name}
+          </p>
+        </div>
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 sm:col-span-2 md:col-span-1">
+          <p className="text-sm text-gray-600">
+            <strong>NID Number:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">{nid_number}</p>
+        </div>
       </div>
 
       {/* Address Info */}
-      <div className="mb-4">
-        <h4 className="font-semibold text-purple-700 mb-2">
+      <div className="mb-6">
+        <h4 className="font-semibold text-purple-700 text-lg mb-3">
           Address Information
         </h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <p>
-              <strong>Permanent Address:</strong>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Permanent Address */}
+          <div className="bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+            <p className="text-sm text-gray-600 font-medium mb-1">
+              Permanent Address:
             </p>
-            <p className="text-gray-700">{permanent_address}</p>
+            <p className="text-gray-800 text-base">{permanent_address}</p>
           </div>
-          <div>
-            <p>
-              <strong>Temporary Address:</strong>
+
+          {/* Temporary Address */}
+          <div className="bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+            <p className="text-sm text-gray-600 font-medium mb-1">
+              Temporary Address:
             </p>
-            <p className="text-gray-700">{temporary_address}</p>
+            <p className="text-gray-800 text-base">{temporary_address}</p>
           </div>
         </div>
       </div>
 
       {/* Documents */}
       <div className="mb-4">
+        {/* Title */}
         <h4 className="font-semibold text-purple-700 mb-3">Documents</h4>
-        <div className="grid grid-cols-2 gap-3">
+
+        {/* Images */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="flex flex-col items-center">
             <p className="text-sm font-medium mb-1">Passport</p>
             <img
               src={passportPhoto}
               alt="Passport"
-              className="w-full h-[200px] object-cover rounded-lg border shadow"
+              className="w-full h-48 sm:h-52 object-cover rounded-lg border shadow"
             />
           </div>
           <div className="flex flex-col items-center">
@@ -118,7 +149,7 @@ const UsersDetailsModal = ({ selectedUser, setSelectedUser }) => {
             <img
               src={nidFront}
               alt="NID Front"
-              className="w-full h-[200px] object-cover rounded-lg border shadow"
+              className="w-full h-48 sm:h-52 object-cover rounded-lg border shadow"
             />
           </div>
           <div className="flex flex-col items-center">
@@ -126,15 +157,15 @@ const UsersDetailsModal = ({ selectedUser, setSelectedUser }) => {
             <img
               src={nidBack}
               alt="NID Back"
-              className="w-full h-[200px] object-cover rounded-lg border shadow"
+              className="w-full h-48 sm:h-52 object-cover rounded-lg border shadow"
             />
           </div>
-          <div className="flex flex-col items-center col-span-2 sm:col-span-1">
+          <div className="flex flex-col items-center">
             <p className="text-sm font-medium mb-1">Signature</p>
             <img
               src={signature}
               alt="Signature"
-              className="w-full h-[200px] object-contain rounded-md border shadow"
+              className="w-full h-40 sm:h-48 object-contain rounded-md border shadow"
             />
           </div>
         </div>
@@ -151,7 +182,7 @@ const UsersDetailsModal = ({ selectedUser, setSelectedUser }) => {
               key={idx}
               className="p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition shadow hover:shadow-2xl"
             >
-              <p className="font-semibold text-lg pb-5">
+              <p className="font-semibold text-lg pb-2">
                 {bill.payment_method}
               </p>
               {bill.account_holder_name && (
