@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BiSolidErrorAlt } from "react-icons/bi";
 
 // Hooks
-import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 
 // Components
 import LoanManagementTable from "./LoanManagementTable/LoanManagementTable";
@@ -182,7 +182,7 @@ const LoanManagement = () => {
         </div>
       </div>
 
-   {/* Tabs */}
+      {/* Tabs */}
       <div className="grid grid-cols-2 sm:flex sm:space-x-3 bg-gray-100 p-2 sm:p-3 rounded-xl shadow-inner mb-6 gap-2 sm:gap-0">
         {/* Pending */}
         <button

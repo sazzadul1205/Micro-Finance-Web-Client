@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useQuery } from "@tanstack/react-query";
 
 // Hooks
-import useAxiosPublic from "../../../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
 
 const NumberName = ({ phone }) => {
   const axiosPublic = useAxiosPublic();

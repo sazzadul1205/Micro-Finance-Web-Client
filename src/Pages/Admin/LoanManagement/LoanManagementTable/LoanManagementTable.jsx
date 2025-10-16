@@ -7,7 +7,7 @@ import { FaInbox } from "react-icons/fa";
 import { FaCheck, FaTimes, FaMoneyBillWave } from "react-icons/fa";
 
 // Hooks
-import useAxiosPublic from "../../../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
 
 // Components
 import NumberName from "../../AllNominees/NumberName/NumberName";

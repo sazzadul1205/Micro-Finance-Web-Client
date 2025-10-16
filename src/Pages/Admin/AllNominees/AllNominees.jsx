@@ -9,7 +9,7 @@ import { BiSolidErrorAlt } from "react-icons/bi";
 import { FaTrash, FaInfoCircle } from "react-icons/fa";
 
 // Hooks
-import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 
 // Components
 import NumberName from "./NumberName/NumberName";
