@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-
-// Packages
+import { FiShare2 } from "react-icons/fi";
 import Swal from "sweetalert2";
 
 const Navbar = () => {
@@ -35,20 +34,53 @@ const Navbar = () => {
     });
   };
 
+  // Share Handler
+  const handleShare = async () => {
+    const shareData = {
+      title: "Naziur Rojman Banking Website",
+      text: "Check out this banking website!",
+      url: window.location.href,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.error("Error sharing:", err);
+      }
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      navigator.clipboard.writeText(window.location.href);
+      alert("Website link copied to clipboard!");
+    }
+  };
+
   return (
     <nav className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 shadow-md px-5 md:px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-center md:text-left">
       {/* Title */}
-      <div className="text-white text-lg md:text-2xl font-bold">
+      <div className="text-white text-md md:text-2xl font-bold">
         Naziur Rojman Banking Website
       </div>
 
-      {/* Logout Button */}
-      <button
-        onClick={handleLogout}
-        className="bg-white text-purple-600 font-semibold px-8 py-2 rounded-xl hover:bg-gray-200 transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer w-full md:w-auto"
-      >
-        লগ আউট
-      </button>
+      {/* Buttons Container */}
+      <div className="flex items-center gap-3 justify-center md:justify-start w-full md:w-auto">
+        {/* Share Button */}
+        <button
+          onClick={handleShare}
+          className="flex items-center gap-2 bg-white text-purple-600 font-semibold px-4 py-2 rounded-xl hover:bg-gray-200 transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer"
+        >
+          <FiShare2 className="w-5 h-5" />
+          Share
+        </button>
+
+        {/* Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="bg-white text-purple-600 font-semibold px-8 py-2 rounded-xl hover:bg-gray-200 transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer"
+        >
+          লগ আউট
+        </button>
+      </div>
     </nav>
   );
 };

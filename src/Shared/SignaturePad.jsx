@@ -6,8 +6,9 @@ const SignaturePad = ({
   label = "দস্তখত দিন",
   onChange,
   required = false,
-  defaultValue = null, // existing signature URL or Blob
-  disabled = false, // parent can lock editing
+  defaultValue = null,
+  disabled = false,
+  maxSizeMB = 32,
 }) => {
   const sigCanvas = useRef(null);
   const [error, setError] = useState("");
@@ -30,14 +31,18 @@ const SignaturePad = ({
 
   // Clear the signature and allow redraw
   const tryAgain = () => {
-    sigCanvas.current.clear();
     setLocked(false);
     setPreview(null);
     setError("");
     onChange && onChange(null);
+
+    // Optional safety delay to clear if still mounted
+    setTimeout(() => {
+      if (sigCanvas.current) sigCanvas.current.clear();
+    }, 100);
   };
 
-  // Save the signature
+  // Save the signature with size limit check
   const save = () => {
     if (sigCanvas.current.isEmpty()) {
       if (required) setError("দস্তখত আবশ্যক");
@@ -54,6 +59,15 @@ const SignaturePad = ({
     }
     const blob = new Blob([ab], { type: mimeString });
 
+    // Size check for ImgBB upload
+    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+    if (blob.size > maxSizeBytes) {
+      setError(
+        `দস্তখতের আকার ${maxSizeMB} MB এর বেশি হতে পারবে না (ImgBB সীমা)।`
+      );
+      return null;
+    }
+
     const url = URL.createObjectURL(blob);
     setPreview(url);
     setLocked(true);
@@ -63,7 +77,7 @@ const SignaturePad = ({
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto">
+    <div className="w-full mx-auto">
       <label className="block text-base sm:text-lg font-semibold text-gray-700 mb-2">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
@@ -80,10 +94,9 @@ const SignaturePad = ({
               ref={sigCanvas}
               penColor="black"
               canvasProps={{
-                className: "rounded-md w-full h-40 sm:h-48 md:h-56",
+                className: "rounded-md w-full h-40",
                 style: {
                   width: "100%",
-                  height: "auto",
                   cursor: locked ? "not-allowed" : "crosshair",
                 },
               }}
@@ -142,6 +155,7 @@ const SignaturePad = ({
   );
 };
 
+// Prop Validation
 SignaturePad.propTypes = {
   label: PropTypes.string,
   onChange: PropTypes.func,
@@ -151,6 +165,7 @@ SignaturePad.propTypes = {
     PropTypes.instanceOf(Blob),
   ]),
   disabled: PropTypes.bool,
+  maxSizeMB: PropTypes.number,
 };
 
 export default SignaturePad;

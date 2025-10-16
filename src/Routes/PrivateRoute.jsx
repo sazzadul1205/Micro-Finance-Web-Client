@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import PropTypes from "prop-types";
 
 const PrivateRoute = ({ children }) => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -22,6 +23,11 @@ const PrivateRoute = ({ children }) => {
   }
 
   return children; // Session valid, render the component
+};
+
+// Prop Validation
+PrivateRoute.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default PrivateRoute;

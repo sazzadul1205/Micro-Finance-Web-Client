@@ -19,81 +19,108 @@ import UserBankInfoEdit from "./UserBankInfoEdit/UserBankInfoEdit";
 import UserInformationEdit from "./UserInformationEdit/UserInformationEdit";
 
 const Loans = () => {
-  // Active Tabs
   const [activeTab, setActiveTab] = useState("request");
 
-  // Menu Items
   const menuItems = [
-    // Loan Management
     { key: "request", label: "ঋণ অনুরোধ", icon: FaMoneyBillWave },
     { key: "status", label: "ঋণের অবস্থা", icon: FaClock },
     { key: "history", label: "ঋণ ইতিহাস", icon: FaHistory },
-
-    // Divider
     { key: "divider1", label: "—", divider: true },
-
-    // Profile Management
     { key: "editUser", label: "ইউজার তথ্য সম্পাদনা", icon: FaUserEdit },
     { key: "nominee", label: "মনোনীত ব্যক্তির তথ্য", icon: FaUsers },
     { key: "bankInfo", label: "ব্যাংক একাউন্ট তথ্য", icon: FaUniversity },
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-72 bg-white shadow-lg rounded-r-2xl p-5">
-        {/* Header */}
-        <h2 className="text-2xl font-bold text-purple-700 mb-6 text-center border-b pb-2">
-          ঋণ ব্যবস্থাপনা
-        </h2>
+    <div className="min-h-screen">
+      <div className="drawer md:drawer-open">
+        {/* Drawer Toggle Input */}
+        <input id="mobile-drawer" type="checkbox" className="drawer-toggle" />
 
-        {/* Navigation */}
-        <nav className="space-y-2">
-          {menuItems.map(({ key, label, icon: Icon, divider }) =>
-            divider ? (
-              <div
-                key={key}
-                className="border-t border-gray-300 my-3 opacity-70"
-              ></div>
-            ) : (
-              <button
-                key={key}
-                onClick={() => setActiveTab(key)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all cursor-pointer ${
-                  activeTab === key
-                    ? "bg-purple-600 text-white shadow-md"
-                    : "text-gray-700 hover:bg-purple-100 hover:text-purple-700"
-                }`}
-              >
-                <Icon size={18} />
-                {label}
-              </button>
-            )
-          )}
-        </nav>
-      </aside>
+        {/* Floating Mobile Toggle Button */}
+        <label
+          htmlFor="mobile-drawer"
+          className="fixed top-20 right-1 z-50 md:hidden bg-purple-600 text-white p-3 rounded-full shadow-lg cursor-pointer hover:bg-purple-700 transition-colors"
+          aria-label="Open Sidebar"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </label>
 
-      {/* Main Content Area */}
-      <main className="flex-1 p-8">
-        {/* Placeholder for dynamic views */}
-        <div className="min-h-full">
-          {activeTab === "request" ? (
-            <LoanRequest />
-          ) : activeTab === "status" ? (
-            <LoanStatus />
-          ) : activeTab === "history" ? (
-            <LoanHistory />
-          ) : activeTab === "editUser" ? (
-            <UserInformationEdit />
-          ) : activeTab === "nominee" ? (
-            <UserNomineeEdit />
-          ) : activeTab === "bankInfo" ? (
-            <UserBankInfoEdit />
-          ) : (
-            "পৃষ্ঠা লোড হচ্ছে..."
-          )}
+        {/* Drawer Content */}
+        <div className="drawer-content flex flex-col md:flex-row bg-gray-100">
+          {/* Main Content */}
+          <main className="flex-1 p-1 md:p-8">
+            <div className="min-h-full">
+              {activeTab === "request" ? (
+                <LoanRequest />
+              ) : activeTab === "status" ? (
+                <LoanStatus />
+              ) : activeTab === "history" ? (
+                <LoanHistory />
+              ) : activeTab === "editUser" ? (
+                <UserInformationEdit />
+              ) : activeTab === "nominee" ? (
+                <UserNomineeEdit />
+              ) : activeTab === "bankInfo" ? (
+                <UserBankInfoEdit />
+              ) : (
+                "পৃষ্ঠা লোড হচ্ছে..."
+              )}
+            </div>
+          </main>
         </div>
-      </main>
+
+        {/* Drawer Sidebar for Mobile */}
+        <div className="drawer-side md:hidden">
+          <label
+            htmlFor="mobile-drawer"
+            aria-label="close sidebar"
+            className="drawer-overlay"
+          ></label>
+          <ul className="menu bg-white min-h-full w-72 p-5 space-y-2">
+            <h2 className="text-2xl font-bold text-purple-700 mb-6 text-center border-b pb-2">
+              ঋণ ব্যবস্থাপনা
+            </h2>
+
+            {menuItems.map(({ key, label, icon: Icon, divider }) =>
+              divider ? (
+                <div
+                  key={key}
+                  className="border-t border-gray-300 my-3 opacity-70"
+                ></div>
+              ) : (
+                <li key={key}>
+                  <label
+                    htmlFor="mobile-drawer"
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all cursor-pointer ${
+                      activeTab === key
+                        ? "bg-purple-600 text-white shadow-md"
+                        : "text-gray-700 hover:bg-purple-100 hover:text-purple-700"
+                    }`}
+                    onClick={() => setActiveTab(key)}
+                  >
+                    {Icon && <Icon size={18} />}
+                    {label}
+                  </label>
+                </li>
+              )
+            )}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };

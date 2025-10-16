@@ -13,6 +13,7 @@ const FileUploadCard = ({
   onChange,
   initialFiles = [],
   validate,
+  maxSizeMB = 32,
 }) => {
   const [files, setFiles] = useState([]);
   const [error, setError] = useState("");
@@ -35,6 +36,18 @@ const FileUploadCard = ({
   // Handle file drop
   const onDrop = useCallback(
     (acceptedFiles) => {
+      const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+      const oversizedFiles = acceptedFiles.filter(
+        (file) => file.size > maxSizeBytes
+      );
+      if (oversizedFiles.length > 0) {
+        setError(
+          `ফাইলের আকার ${maxSizeMB} MB এর বেশি হতে পারবে না (ImgBB সীমা)।`
+        );
+        return;
+      }
+
       const mapped = acceptedFiles.map((file) =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
@@ -50,7 +63,7 @@ const FileUploadCard = ({
       setError("");
       onChange?.(updatedFiles);
     },
-    [files, multiple, maxFiles, onChange]
+    [files, multiple, maxFiles, onChange, maxSizeMB]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -96,13 +109,13 @@ const FileUploadCard = ({
       <div
         {...getRootProps()}
         className={`border-4 border-dashed rounded-md p-6 my-4 flex flex-col items-center justify-center text-center
-          transition-all duration-300 cursor-pointer
-          ${
-            isDragActive
-              ? "border-purple-500 bg-purple-50"
-              : "border-gray-300 bg-white"
-          }
-          hover:border-purple-500 hover:bg-purple-50`}
+      transition-all duration-300 cursor-pointer
+      ${
+        isDragActive
+          ? "border-purple-500 bg-purple-50"
+          : "border-gray-300 bg-white"
+      }
+      hover:border-purple-500 hover:bg-purple-50`}
       >
         <input {...getInputProps()} />
 
@@ -120,22 +133,30 @@ const FileUploadCard = ({
           </div>
         ) : (
           /* --- File Previews --- */
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            {/* --- Spacer --- */}
+            <div className=""></div>
+
+            {/* --- File Cards --- */}
             {files.map((file, index) => (
               <div
                 key={index}
                 className="relative border rounded-md overflow-hidden shadow-sm p-2 flex flex-col items-center justify-center bg-white"
               >
                 {file.preview && (
-                  <img
-                    src={file.preview}
-                    alt={file.name}
-                    className="w-full h-36 sm:h-40 object-contain rounded-md"
-                  />
+                  <div className="w-full h-36 sm:h-40 flex items-center justify-center bg-gray-50 rounded-md">
+                    <img
+                      src={file.preview}
+                      alt={file.name}
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
                 )}
+
                 <p className="text-gray-700 mt-2 truncate text-center w-full text-sm sm:text-base">
                   {file.name}
                 </p>
+
                 <button
                   type="button"
                   onClick={() => removeFile(index)}
@@ -145,6 +166,9 @@ const FileUploadCard = ({
                 </button>
               </div>
             ))}
+
+            {/* --- Spacer --- */}
+            <div className=""></div>
           </div>
         )}
       </div>
@@ -157,6 +181,7 @@ const FileUploadCard = ({
   );
 };
 
+// Prop Validation
 FileUploadCard.propTypes = {
   label: PropTypes.string,
   icon: PropTypes.elementType,
@@ -166,6 +191,7 @@ FileUploadCard.propTypes = {
   onChange: PropTypes.func,
   initialFiles: PropTypes.array,
   validate: PropTypes.func,
+  maxSizeMB: PropTypes.number,
 };
 
 export default FileUploadCard;

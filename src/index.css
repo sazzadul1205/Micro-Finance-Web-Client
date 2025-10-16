@@ -1,10 +1,14 @@
+/* Noto Sans */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@100..900&display=swap");
+
 @import "tailwindcss";
 @plugin "daisyui";
 
-
-/* Noto Sans */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@100..900&display=swap');
-
 body {
-    font-family: "Noto Sans Bengali", sans-serif;
+  font-family: "Noto Sans Bengali", sans-serif;
+}
+
+/* Apply cursor pointer to all buttons and elements with btn class */
+button {
+  cursor: pointer;
 }

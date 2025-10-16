@@ -117,7 +117,7 @@ const LoanRequest = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white shadow-2xl rounded-xl p-8 text-gray-800 mt-5">
+    <div className="max-w-3xl mx-auto bg-white shadow-2xl rounded-xl p-6 sm:p-8 text-gray-800 mt-5">
       {/* Header */}
       <h2 className="text-2xl font-bold text-center text-purple-700 mb-6">
         ঋণ আবেদন ফর্ম
@@ -134,22 +134,23 @@ const LoanRequest = () => {
           onChange={(e) => setLoanType(e.target.value)}
           selectPlaceholder="ঋণের ধরন নির্বাচন করুন"
           options={LoanTypeOptions}
+          className="w-full"
         />
 
         <TextInput
           label="ঋণের পরিমাণ (টাকা)"
           id="loan_amount"
           icon={FaMoneyBillWave}
-          type="text" // keep as text to allow commas
+          type="text"
           placeholder="ঋণের পরিমাণ লিখুন"
           value={loanAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
           onChange={(e) => {
-            // Remove commas before saving to state
             const numericValue = e.target.value.replace(/,/g, "");
             if (!isNaN(numericValue)) {
               setLoanAmount(numericValue);
             }
           }}
+          className="w-full"
         />
 
         <TextInput
@@ -161,6 +162,7 @@ const LoanRequest = () => {
           onChange={(e) => setLoanDuration(e.target.value)}
           selectPlaceholder="ঋণের মেয়াদ নির্বাচন করুন"
           options={loanDurationOptions}
+          className="w-full"
         />
 
         {/* Repayment Method Buttons */}
@@ -168,13 +170,13 @@ const LoanRequest = () => {
           <label className="block text-lg font-semibold text-gray-700 mb-2">
             কিস্তি পরিশোধের পদ্ধতি
           </label>
-          <div className="flex border-b border-gray-300">
+          <div className="flex flex-wrap border-b border-gray-300 -mb-1">
             {repaymentOptions.map((opt) => (
               <button
                 type="button"
                 key={opt.value}
                 onClick={() => setRepaymentMethod(opt.value)}
-                className={`flex-1 text-center py-2 font-semibold transition-colors border-b-2 cursor-pointer ${
+                className={`flex-1 sm:flex-auto text-center py-2 font-semibold transition-colors border-b-2 cursor-pointer mb-1 sm:mb-0 ${
                   repaymentMethod === opt.value
                     ? "border-purple-600 text-purple-600"
                     : "border-transparent text-gray-700 hover:text-purple-600 hover:border-purple-300"

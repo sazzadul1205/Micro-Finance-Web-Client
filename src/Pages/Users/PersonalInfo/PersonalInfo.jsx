@@ -33,7 +33,6 @@ import FileUploadCard from "../../../Shared/FileUploadCard";
 // Hooks
 import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
 
-
 // Image Uploader
 const Image_Hosting_Key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const Image_Hosting_API = `https://api.imgbb.com/1/upload?key=${Image_Hosting_Key}`;
@@ -326,32 +325,47 @@ const PersonalInfo = () => {
             এটাচমেন্ট বা কাগজপত্রসমূহ
           </h3>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 gap-2">
+            {/* NID Front */}
             <FileUploadCard
-              label="এনআইডি কার্ড সামনের দিক"
+              maxFiles={1}
+              maxSizeMB={32}
               icon={FaIdCard}
               multiple={false}
-              maxFiles={1}
-              accept={{ "image/*": [] }}
               onChange={setNidFront}
+              accept={{ "image/*": [] }}
+              label="এনআইডি কার্ড সামনের দিক"
             />
+
+            {/* NID Back */}
             <FileUploadCard
-              label="এনআইডি কার্ড পিছনের দিক"
+              maxFiles={1}
+              maxSizeMB={32}
               icon={FaIdCard}
               multiple={false}
-              maxFiles={1}
-              accept={{ "image/*": [] }}
               onChange={setNidBack}
+              accept={{ "image/*": [] }}
+              label="এনআইডি কার্ড পিছনের দিক"
             />
+
+            {/* Passport Size Photo */}
             <FileUploadCard
-              label="পাসপোর্ট সাইজের ছবি"
+              maxFiles={1}
+              maxSizeMB={32}
               icon={FaUserCircle}
               multiple={false}
-              maxFiles={1}
               accept={{ "image/*": [] }}
+              label="পাসপোর্ট সাইজের ছবি"
               onChange={setPassportPhoto}
             />
-            <SignaturePad label="দস্তখত দিন" required onChange={setSignature} />
+
+            {/* Signature */}
+            <SignaturePad
+              required
+              maxSizeMB={32}
+              label="দস্তখত দিন"
+              onChange={setSignature}
+            />
           </div>
         </div>
 
