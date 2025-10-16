@@ -31,7 +31,7 @@ import SignaturePad from "../../../Shared/SignaturePad";
 import FileUploadCard from "../../../Shared/FileUploadCard";
 
 // Hooks
-import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 
 // Image Uploader
 const Image_Hosting_Key = import.meta.env.VITE_IMAGE_HOSTING_KEY;

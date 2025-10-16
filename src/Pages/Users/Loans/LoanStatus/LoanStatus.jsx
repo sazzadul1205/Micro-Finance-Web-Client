@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { FaInbox } from "react-icons/fa";
 
 // Hooks
-import useAxiosPublic from "../../../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
 
 // Lists
 import { LoanTypeOptions } from "../../../../Shared/Lists/LoanTypeOptions";

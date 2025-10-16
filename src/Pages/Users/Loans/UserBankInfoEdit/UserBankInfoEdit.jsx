@@ -20,7 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import TextInput from "../../../../Shared/TextInput";
 
 // Hooks
-import useAxiosPublic from "../../../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
 import { BiSolidErrorAlt } from "react-icons/bi";
 
 // Payment Options

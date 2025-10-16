@@ -21,7 +21,7 @@ import TextInput from "../../../../Shared/TextInput";
 import FileUploadCard from "../../../../Shared/FileUploadCard";
 
 // Hooks
-import useAxiosPublic from "../../../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
 import { BiSolidErrorAlt } from "react-icons/bi";
 import { RiErrorWarningFill } from "react-icons/ri";
 

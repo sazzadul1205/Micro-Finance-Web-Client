@@ -15,7 +15,7 @@ import Swal from "sweetalert2";
 import TextInput from "../../../../Shared/TextInput";
 
 // Hooks
-import useAxiosPublic from "../../../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
 
 // Lists
 import { LoanTypeOptions } from "../../../../Shared/Lists/LoanTypeOptions";

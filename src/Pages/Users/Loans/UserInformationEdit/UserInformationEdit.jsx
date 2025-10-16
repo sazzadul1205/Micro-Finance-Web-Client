@@ -29,7 +29,7 @@ import SignaturePad from "../../../../Shared/SignaturePad";
 import FileUploadCard from "../../../../Shared/FileUploadCard";
 
 // Hooks
-import useAxiosPublic from "../../../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../../Hooks/useAxiosPublic";
 import { BiSolidErrorAlt } from "react-icons/bi";
 
 // Image Uploader
