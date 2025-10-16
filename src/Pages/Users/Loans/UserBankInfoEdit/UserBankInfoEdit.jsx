@@ -20,6 +20,7 @@ import TextInput from "../../../../Shared/TextInput";
 
 // Hooks
 import useAxiosPublic from "../../../../../Hooks/useAxiosPublic";
+import { BiSolidErrorAlt } from "react-icons/bi";
 
 // Payment Options
 const paymentOptions = [
@@ -34,6 +35,8 @@ const paymentOptions = [
 const UserBankInfoEdit = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const axiosPublic = useAxiosPublic();
+
+  // Navigation
   const navigate = useNavigate();
 
   // Form handler
@@ -136,48 +139,69 @@ const UserBankInfoEdit = () => {
     }
   };
 
-  // Loading State
+  // Centered Loading
   if (isLoading)
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-purple-600"></div>
-        <span className="ml-3 text-purple-700 font-semibold">Loading...</span>
+      <div className="fixed inset-0 flex flex-col justify-center items-center bg-white/80 z-50">
+        <div className="animate-spin rounded-full h-14 w-14 border-t-4 border-b-4 border-purple-600 mb-4"></div>
+        <span className="text-purple-700 font-semibold text-lg">
+          Loading, please wait...
+        </span>
       </div>
     );
 
-  // Error State
-  if (error) {
+  // Centered Error
+  if (error)
     return (
-      <div className="flex flex-col items-center justify-center h-64 bg-red-50 rounded-lg p-6 border border-red-300">
-        <p className="text-red-600 font-semibold text-lg mb-2">
+      <div className="fixed inset-0 flex flex-col justify-center items-center bg-red-50 text-center border-t border-red-200 z-50">
+        <BiSolidErrorAlt className="text-red-500 text-8xl mb-3" />
+        <p className="text-red-600 font-bold text-xl mb-2">
           Oops! Something went wrong.
         </p>
-        <p className="text-red-500 text-sm">
+        <p className="text-red-500 text-base max-w-md">
           {error?.message || "Unable to load data. Please try again later."}
         </p>
       </div>
     );
-  }
 
   return (
     <div>
       {/* Header */}
-      <div className="text-center space-y-3 items-center gap-4 bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 py-5 text-white rounded-t-3xl">
-        <h3 className="text-3xl font-semibold">ব্যাংক একাউন্ট তথ্য</h3>
-        <p className="text-lg">
+      <div className="text-center flex flex-col items-center gap-2 sm:gap-4 bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 py-5 px-4 rounded-t-3xl">
+        <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white">
+          ব্যাংক একাউন্ট তথ্য
+        </h3>
+        <p className="text-sm sm:text-base md:text-lg text-white max-w-md">
           আপনার ঋণ পরিশোধ ও প্রাপ্তির জন্য অ্যাকাউন্ট বিবরণী
         </p>
       </div>
 
       {/* Payment tabs */}
-      <div className="mt-5 px-5">
-        <div className="flex border-b border-gray-300">
+      <div className="mt-5 overflow-x-auto">
+        <div className="hidden md:flex min-w-max border-b border-gray-300">
           {paymentOptions.map((option) => (
             <button
               key={option.value}
               type="button"
               onClick={() => setPaymentMethod(option.value)}
-              className={`flex-1 text-center py-2 font-semibold transition-colors border-b-2 cursor-pointer ${
+              className={`flex-1 text-center py-2 px-3 sm:px-4 font-semibold transition-colors border-b-2 cursor-pointer whitespace-nowrap ${
+                paymentMethod === option.value
+                  ? "border-purple-600 text-purple-600"
+                  : "border-transparent text-gray-700 hover:text-purple-600 hover:border-purple-300"
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid md:hidden grid-cols-2 sm:flex sm:overflow-x-auto border-b border-gray-300">
+          {paymentOptions.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => setPaymentMethod(option.value)}
+              className={`w-full sm:w-auto text-center py-2 px-3 sm:px-4 font-semibold transition-colors border-b-2 cursor-pointer whitespace-nowrap ${
                 paymentMethod === option.value
                   ? "border-purple-600 text-purple-600"
                   : "border-transparent text-gray-700 hover:text-purple-600 hover:border-purple-300"
@@ -190,10 +214,7 @@ const UserBankInfoEdit = () => {
       </div>
 
       {/* Form */}
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-4 grid grid-cols-2 gap-3 mt-4 px-5 pb-10 text-black"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
         {["bkash", "nogad", "rocket", "upay", "surecash"].includes(
           paymentMethod
         ) && (
@@ -210,7 +231,7 @@ const UserBankInfoEdit = () => {
         )}
 
         {paymentMethod === "bank_transfer" && (
-          <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <TextInput
               label="ব্যাংকের নাম"
               id="bank_name"
@@ -241,7 +262,7 @@ const UserBankInfoEdit = () => {
               validation={{ required: "শাখার নাম আবশ্যক" }}
               error={errors.branch_name}
             />
-          </>
+          </div>
         )}
 
         <TextInput
@@ -255,11 +276,10 @@ const UserBankInfoEdit = () => {
           error={errors.account_holder_name}
         />
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={loading}
-          className={`col-span-2 w-full py-3 text-white font-semibold rounded-md transition-colors cursor-pointer ${
+          className={`w-full py-3 text-white font-semibold rounded-md transition-colors cursor-pointer ${
             loading
               ? "bg-purple-400 cursor-not-allowed"
               : "bg-purple-600 hover:bg-purple-700"
@@ -271,7 +291,7 @@ const UserBankInfoEdit = () => {
 
       {/* Preview existing accounts */}
       {accounts.length > 0 && (
-        <div className="px-5 pb-5 mt-3 space-y-6">
+        <div className="px-1 md:px-5 pb-5 mt-3 space-y-6">
           {/* Header */}
           <h3 className="text-2xl font-semibold text-gray-800">
             সংরক্ষিত একাউন্টসমূহ
@@ -282,7 +302,7 @@ const UserBankInfoEdit = () => {
             {accounts.map((acc, idx) => (
               <div
                 key={idx}
-                className="p-5 bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300 relative"
+                className="p-4 sm:p-5 bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300"
               >
                 <button
                   type="button"
@@ -328,8 +348,8 @@ const UserBankInfoEdit = () => {
         </div>
       )}
 
-      {/* Final save */}
-      <div className="p-5">
+      {/* Final submit button */}
+      <div className="mt-6 px-2 sm:px-0 pb-6">
         <button
           type="button"
           onClick={onFinalSubmit}

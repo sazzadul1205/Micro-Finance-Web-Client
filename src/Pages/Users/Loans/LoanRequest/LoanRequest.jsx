@@ -117,9 +117,9 @@ const LoanRequest = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white shadow-2xl rounded-xl p-6 sm:p-8 text-gray-800 mt-5">
+    <div className="max-w-3xl mx-auto bg-white shadow-2xl rounded-xl p-6 sm:p-8 text-gray-800 py-5">
       {/* Header */}
-      <h2 className="text-2xl font-bold text-center text-purple-700 mb-6">
+      <h2 className="text-2xl font-bold text-center text-purple-700">
         ঋণ আবেদন ফর্ম
       </h2>
 

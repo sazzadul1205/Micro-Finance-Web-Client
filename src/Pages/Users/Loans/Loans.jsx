@@ -108,7 +108,7 @@ const Loans = () => {
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all cursor-pointer ${
                       activeTab === key
                         ? "bg-purple-600 text-white shadow-md"
-                        : "text-gray-700 hover:bg-purple-100 hover:text-purple-700"
+                        : "text-black hover:bg-purple-100 hover:text-purple-700"
                     }`}
                     onClick={() => setActiveTab(key)}
                   >
