@@ -18,7 +18,7 @@ const TextInput = ({
   ...rest
 }) => {
   return (
-    <div className="w-full">
+    <div className="w-full text-black">
       {/* Label */}
       <label
         htmlFor={id}

@@ -37,28 +37,6 @@ const Loans = () => {
         {/* Drawer Toggle Input */}
         <input id="mobile-drawer" type="checkbox" className="drawer-toggle" />
 
-        {/* Floating Mobile Toggle Button */}
-        <label
-          htmlFor="mobile-drawer"
-          className="fixed top-20 right-1 z-50 md:hidden bg-purple-600 text-white p-3 rounded-full shadow-lg cursor-pointer hover:bg-purple-700 transition-colors"
-          aria-label="Open Sidebar"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        </label>
-
         {/* Drawer Content */}
         <div className="drawer-content flex flex-col md:flex-row bg-gray-100">
           {/* Main Content */}

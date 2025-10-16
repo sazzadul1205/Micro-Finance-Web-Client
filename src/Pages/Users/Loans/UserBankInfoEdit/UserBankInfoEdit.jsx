@@ -7,6 +7,7 @@ import {
   FaMoneyBillWave,
   FaMobileAlt,
   FaUniversity,
+  FaInbox,
 } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 
@@ -167,7 +168,7 @@ const UserBankInfoEdit = () => {
   return (
     <div>
       {/* Header */}
-      <div className="text-center flex flex-col items-center gap-2 sm:gap-4 bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 py-5 px-4 rounded-t-3xl">
+      <div className="text-center flex flex-col items-center gap-2 sm:gap-4 bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 py-5 px-4 md:rounded-t-3xl">
         <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white">
           ব্যাংক একাউন্ট তথ্য
         </h3>
@@ -290,61 +291,80 @@ const UserBankInfoEdit = () => {
       </form>
 
       {/* Preview existing accounts */}
-      {accounts.length > 0 && (
-        <div className="px-1 md:px-5 pb-5 mt-3 space-y-6">
+      {accounts.length > 0 ? (
+        <div className="px-2 md:px-5 pb-6 mt-4 space-y-6">
           {/* Header */}
-          <h3 className="text-2xl font-semibold text-gray-800">
+          <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 text-center sm:text-left">
             সংরক্ষিত একাউন্টসমূহ
           </h3>
 
-          {/* Accounts */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Accounts Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
             {accounts.map((acc, idx) => (
               <div
                 key={idx}
-                className="p-4 sm:p-5 bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300"
+                className="relative p-4 sm:p-5 bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-xl transition-all duration-300"
               >
+                {/* Delete button */}
                 <button
                   type="button"
                   onClick={() => handleDelete(idx)}
-                  className="absolute top-5 right-5 text-red-500 font-bold hover:text-red-700 cursor-pointer"
+                  className="absolute top-3 right-3 text-red-500 hover:text-red-700 transition-colors"
+                  aria-label="অ্যাকাউন্ট মুছুন"
                 >
-                  <ImCross />
+                  <ImCross size={14} />
                 </button>
 
-                <h4 className="text-lg font-bold mb-3 text-purple-700">
+                {/* Account type */}
+                <h4 className="text-lg sm:text-xl font-bold mb-2 text-purple-700">
                   {acc.payment_method === "bank_transfer"
                     ? "ব্যাংক ট্রান্সফার"
                     : acc.payment_method.charAt(0).toUpperCase() +
                       acc.payment_method.slice(1)}
                 </h4>
 
-                {acc.mobile_number && (
-                  <p className="flex items-center gap-2 text-gray-700 mb-1">
-                    মোবাইল নাম্বার: {acc.mobile_number}
+                {/* Account details */}
+                <div className="space-y-1 text-sm sm:text-base text-gray-700">
+                  {acc.mobile_number && (
+                    <p>
+                      <span className="font-semibold">মোবাইল নাম্বার:</span>{" "}
+                      {acc.mobile_number}
+                    </p>
+                  )}
+                  {acc.bank_name && (
+                    <p>
+                      <span className="font-semibold">ব্যাংকের নাম:</span>{" "}
+                      {acc.bank_name}
+                    </p>
+                  )}
+                  {acc.account_number && (
+                    <p>
+                      <span className="font-semibold">একাউন্ট নাম্বার:</span>{" "}
+                      {acc.account_number}
+                    </p>
+                  )}
+                  {acc.branch_name && (
+                    <p>
+                      <span className="font-semibold">শাখা:</span>{" "}
+                      {acc.branch_name}
+                    </p>
+                  )}
+                  <p className="pt-1 border-t border-gray-100">
+                    <span className="font-semibold">একাউন্ট হোল্ডার:</span>{" "}
+                    {acc.account_holder_name}
                   </p>
-                )}
-                {acc.bank_name && (
-                  <p className="flex items-center gap-2 text-gray-700 mb-1">
-                    ব্যাংকের নাম: {acc.bank_name}
-                  </p>
-                )}
-                {acc.account_number && (
-                  <p className="flex items-center gap-2 text-gray-700 mb-1">
-                    একাউন্ট নাম্বার: {acc.account_number}
-                  </p>
-                )}
-                {acc.branch_name && (
-                  <p className="flex items-center gap-2 text-gray-700 mb-1">
-                    শাখা: {acc.branch_name}
-                  </p>
-                )}
-                <p className="flex items-center gap-2 text-gray-700 mt-2">
-                  একাউন্ট হোল্ডার: {acc.account_holder_name}
-                </p>
+                </div>
               </div>
             ))}
           </div>
+        </div>
+      ) : (
+        // Fallback when no accounts
+        <div className="px-4 py-8 flex flex-col items-center justify-center bg-white border border-gray-200 rounded-xl shadow-sm mt-5">
+          <FaInbox size={40} className="text-gray-400 mb-2" />
+          <p className="text-gray-600 font-medium text-lg">
+            কোন একাউন্ট সংরক্ষিত নেই
+          </p>
         </div>
       )}
 

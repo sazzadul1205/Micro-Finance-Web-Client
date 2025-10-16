@@ -89,152 +89,244 @@ const LoanManagementTable = ({
   };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full border-collapse text-sm">
-        {/* Table Header */}
-        <thead>
-          <tr className="text-white uppercase text-xs text-left tracking-wider bg-purple-600">
-            <th className="py-4 px-6">#</th>
-            <th className="py-4 px-6">Name</th>
-            <th className="py-4 px-6">Loan Type</th>
-            <th className="py-4 px-6">Amount</th>
-            <th className="py-4 px-6">Duration</th>
-            <th className="py-4 px-6">Repayment Method</th>
-            <th className="py-4 px-6">Installment</th>
-            <th className="py-4 px-6">Status</th>
-            <th className="py-4 px-6 text-center">Action</th>
-          </tr>
-        </thead>
-
-        {/* Table Body */}
-        <tbody>
-          {data.length === 0 ? (
+    <div className="w-full">
+      {/* Desktop Table */}
+      <div className="overflow-x-auto hidden md:block w-full rounded-lg shadow-lg border border-gray-200">
+        <table className="table w-full">
+          <thead className="bg-purple-600 text-white uppercase text-sm tracking-wider">
             <tr>
-              <td colSpan={9}>
-                <div className="bg-white rounded-lg shadow-md flex flex-col items-center justify-center gap-2 py-8 mx-auto w-full">
-                  <FaInbox size={36} className="text-gray-400" />
-                  <span className="text-lg font-medium text-gray-600">
-                    No data found
+              <th className="py-4 px-6">#</th>
+              <th className="py-4 px-6">Name</th>
+              <th className="py-4 px-6">Loan Type</th>
+              <th className="py-4 px-6">Amount</th>
+              <th className="py-4 px-6">Duration</th>
+              <th className="py-4 px-6">Repayment</th>
+              <th className="py-4 px-6">Installment</th>
+              <th className="py-4 px-6">Status</th>
+              <th className="py-4 px-6 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.length === 0 ? (
+              <tr>
+                <td colSpan={9} className="text-center py-6">
+                  <div className="flex flex-col items-center gap-2">
+                    <FaInbox size={36} className="text-gray-400" />
+                    <span className="text-lg font-medium text-gray-600">
+                      No data found
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            ) : (
+              data.map((loan, index) => {
+                const status = loan.status?.toLowerCase();
+                return (
+                  <tr
+                    key={loan._id}
+                    className="hover:bg-gray-50 transition-colors duration-150 bg-white border-b border-gray-300"
+                  >
+                    <td className="py-4 px-6">{index + 1}</td>
+                    <td className="font-semibold">
+                      <NumberName phone={loan?.phone} />
+                    </td>
+                    <td className="py-4 px-6">{loanTypeMap[loan.loan_type]}</td>
+                    <td className="py-4 px-6">
+                      ৳ {parseFloat(loan.loan_amount).toLocaleString("en-BD")}
+                    </td>
+                    <td className="py-4 px-6">
+                      {durationMap[loan.loan_duration]}
+                    </td>
+                    <td className="py-4 px-6">
+                      {repaymentMap[loan.repayment_method]}
+                    </td>
+                    <td className="py-4 px-6">
+                      ৳{" "}
+                      {parseFloat(loan.installment_amount).toLocaleString(
+                        "en-BD"
+                      )}
+                    </td>
+                    <td className="py-4 px-6">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          status === "requested"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : status === "accepted"
+                            ? "bg-green-100 text-green-800"
+                            : status === "rejected"
+                            ? "bg-red-100 text-red-800"
+                            : status === "paying"
+                            ? "bg-blue-100 text-blue-800"
+                            : status === "full paid"
+                            ? "bg-purple-100 text-purple-800"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {status === "requested"
+                          ? "Pending"
+                          : status === "accepted"
+                          ? "Accepted"
+                          : status === "rejected"
+                          ? "Rejected"
+                          : status === "paying"
+                          ? "In Progress"
+                          : status === "full paid"
+                          ? "Fully Paid"
+                          : loan.status}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 text-center">
+                      {["requested", "accepted"].includes(status) && (
+                        <div className="flex justify-center gap-3 flex-wrap">
+                          {status === "requested" && (
+                            <>
+                              <button
+                                onClick={() => handleAction(loan._id, "accept")}
+                                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition cursor-pointer"
+                              >
+                                <FaCheck /> Accept
+                              </button>
+                              <button
+                                onClick={() => handleAction(loan._id, "reject")}
+                                className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 transition cursor-pointer"
+                              >
+                                <FaTimes /> Reject
+                              </button>
+                            </>
+                          )}
+                          {status === "accepted" && (
+                            <button
+                              onClick={() => handleAction(loan._id, "fullPaid")}
+                              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition cursor-pointer"
+                            >
+                              <FaMoneyBillWave /> Full Paid
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden flex flex-col gap-4 p-1 md:p-2">
+        {data.length === 0 ? (
+          <div className="bg-white rounded-lg shadow-md flex flex-col items-center justify-center gap-2 py-8 mx-auto w-full">
+            <FaInbox size={36} className="text-gray-400" />
+            <span className="text-lg font-medium text-gray-600">
+              No data found
+            </span>
+          </div>
+        ) : (
+          data.map((loan, index) => {
+            const status = loan.status?.toLowerCase();
+            return (
+              <div
+                key={loan._id}
+                className="bg-white rounded-lg shadow-md border border-gray-200 p-4 flex flex-col gap-2"
+              >
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold">#{index + 1}</span>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                      status === "requested"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : status === "accepted"
+                        ? "bg-green-100 text-green-800"
+                        : status === "rejected"
+                        ? "bg-red-100 text-red-800"
+                        : status === "paying"
+                        ? "bg-blue-100 text-blue-800"
+                        : status === "full paid"
+                        ? "bg-purple-100 text-purple-800"
+                        : "bg-gray-100 text-gray-800"
+                    }`}
+                  >
+                    {status === "requested"
+                      ? "Pending"
+                      : status === "accepted"
+                      ? "Accepted"
+                      : status === "rejected"
+                      ? "Rejected"
+                      : status === "paying"
+                      ? "In Progress"
+                      : status === "full paid"
+                      ? "Fully Paid"
+                      : loan.status}
                   </span>
                 </div>
-              </td>
-            </tr>
-          ) : (
-            data.map((loan, index) => {
-              const status = loan.status?.toLowerCase();
 
-              return (
-                <tr
-                  key={loan._id}
-                  className="hover:bg-gray-50 transition-colors duration-150 bg-white border-b border-gray-300"
-                >
-                  {/* Index */}
-                  <td className="py-4 px-6">{index + 1}</td>
+                {/*  */}
+                <div className="text-sm">
+                  <strong>Name:</strong> <NumberName phone={loan?.phone} />
+                </div>
 
-                  {/* Name */}
-                  <td className="font-semibold">
-                    <NumberName phone={loan?.phone} />
-                  </td>
+                {/*  */}
+                <div className="text-sm">
+                  <strong>Loan Type:</strong> {loanTypeMap[loan.loan_type]}
+                </div>
 
-                  {/* Loan Type */}
-                  <td className="py-4 px-6">{loanTypeMap[loan.loan_type]}</td>
+                {/*  */}
+                <div className="text-sm">
+                  <strong>Amount:</strong> ৳{" "}
+                  {parseFloat(loan.loan_amount).toLocaleString("en-BD")}
+                </div>
 
-                  {/* Amount */}
-                  <td className="py-4 px-6">
-                    ৳ {parseFloat(loan.loan_amount).toLocaleString("en-BD")}
-                  </td>
+                {/*  */}
+                <div className="text-sm">
+                  <strong>Duration:</strong> {durationMap[loan.loan_duration]}
+                </div>
 
-                  {/* Duration */}
-                  <td className="py-4 px-6">
-                    {durationMap[loan.loan_duration]}
-                  </td>
+                {/*  */}
+                <div className="text-sm">
+                  <strong>Repayment:</strong>{" "}
+                  {repaymentMap[loan.repayment_method]}
+                </div>
 
-                  {/* Repayment Method */}
-                  <td className="py-4 px-6">
-                    {repaymentMap[loan.repayment_method]}
-                  </td>
+                {/*  */}
+                <div className="text-sm">
+                  <strong>Installment:</strong> ৳{" "}
+                  {parseFloat(loan.installment_amount).toLocaleString("en-BD")}
+                </div>
 
-                  {/* Installment */}
-                  <td className="py-4 px-6">
-                    ৳{" "}
-                    {parseFloat(loan.installment_amount).toLocaleString(
-                      "en-BD"
+                {["requested", "accepted"].includes(status) && (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {status === "requested" && (
+                      <>
+                        <button
+                          onClick={() => handleAction(loan._id, "accept")}
+                          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-red-600 transition-all"
+                        >
+                          <FaCheck /> Accept
+                        </button>
+                        <button
+                          onClick={() => handleAction(loan._id, "reject")}
+                          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition-all"
+                        >
+                          <FaTimes /> Reject
+                        </button>
+                      </>
                     )}
-                  </td>
-
-                  {/* Status */}
-                  <td className="py-4 px-6">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        status === "requested"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : status === "accepted"
-                          ? "bg-green-100 text-green-800"
-                          : status === "rejected"
-                          ? "bg-red-100 text-red-800"
-                          : status === "paying"
-                          ? "bg-blue-100 text-blue-800"
-                          : status === "full paid"
-                          ? "bg-purple-100 text-purple-800"
-                          : "bg-gray-100 text-gray-800"
-                      }`}
-                    >
-                      {status === "requested"
-                        ? "Pending"
-                        : status === "accepted"
-                        ? "Accepted"
-                        : status === "rejected"
-                        ? "Rejected"
-                        : status === "paying"
-                        ? "In Progress"
-                        : status === "full paid"
-                        ? "Fully Paid"
-                        : loan.status}
-                    </span>
-                  </td>
-
-                  {/* Actions */}
-                  <td className="py-4 px-6 text-center">
-                    {["requested", "accepted"].includes(status) && (
-                      <div className="flex justify-center gap-3">
-                        {status === "requested" && (
-                          <>
-                            {/* Accept Button */}
-                            <button
-                              onClick={() => handleAction(loan._id, "accept")}
-                              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition cursor-pointer "
-                            >
-                              <FaCheck /> Accept
-                            </button>
-
-                            {/* Reject Button */}
-                            <button
-                              onClick={() => handleAction(loan._id, "reject")}
-                              className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 transition cursor-pointer "
-                            >
-                              <FaTimes /> Reject
-                            </button>
-                          </>
-                        )}
-
-                        {/* Full Paid Button */}
-                        {status === "accepted" && (
-                          <button
-                            onClick={() => handleAction(loan._id, "fullPaid")}
-                            className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition cursor-pointer "
-                          >
-                            <FaMoneyBillWave /> Full Paid
-                          </button>
-                        )}
-                      </div>
+                    {status === "accepted" && (
+                      <button
+                        onClick={() => handleAction(loan._id, "fullPaid")}
+                        className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-yellow-500 text-white rounded-lg shadow hover:bg-red-600 transition-all"
+                      >
+                        <FaMoneyBillWave /> Full Paid
+                      </button>
                     )}
-                  </td>
-                </tr>
-              );
-            })
-          )}
-        </tbody>
-      </table>
+                  </div>
+                )}
+              </div>
+            );
+          })
+        )}
+      </div>
     </div>
   );
 };

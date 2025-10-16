@@ -56,7 +56,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 shadow-md px-5 md:px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-center md:text-left">
+    <nav className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 shadow-md px-5 md:px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-center md:text-left relative">
       {/* Title */}
       <div className="text-white text-md md:text-2xl font-bold">
         Naziur Rojman Banking Website
@@ -81,6 +81,28 @@ const Navbar = () => {
           লগ আউট
         </button>
       </div>
+
+      {/* Mobile Menu Button — bottom-right inside navbar */}
+      <label
+        htmlFor="mobile-drawer"
+        className="absolute z-10 -bottom-6 right-1 md:hidden bg-purple-700 text-white p-3 rounded-full shadow-md cursor-pointer hover:bg-purple-800 transition-all duration-200"
+        aria-label="Open Sidebar"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </label>
     </nav>
   );
 };

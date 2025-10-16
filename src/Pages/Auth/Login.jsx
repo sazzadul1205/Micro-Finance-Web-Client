@@ -59,18 +59,19 @@ const Login = () => {
 
         Swal.fire({
           icon: "success",
-          title: "লগইন সফল",
+          title: "লগইন সফল ✅",
           text: "স্বাগতম!",
           confirmButtonColor: "#6366F1",
+          showConfirmButton: false,
+          timer: 1800,
+          timerProgressBar: true,
         }).then(() => {
           setLoading(false);
 
           // Redirect based on role
-          if (res.data.role === "admin") {
-            window.location.href = "/Admin/AllUsers";
-          } else {
-            window.location.href = "/PersonalInfo";
-          }
+          const redirectURL =
+            res.data.role === "admin" ? "/Admin/AllUsers" : "/PersonalInfo";
+          window.location.href = redirectURL;
         });
       } else {
         setLoading(false);
