@@ -18,7 +18,7 @@ import {
 } from "react-icons/fa";
 
 // Hooks
-import useAxiosPublic from "../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 const SignUp = () => {
   const axiosPublic = useAxiosPublic();

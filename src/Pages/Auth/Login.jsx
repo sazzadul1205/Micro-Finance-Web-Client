@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { FaPhoneAlt, FaLock, FaEyeSlash, FaEye } from "react-icons/fa";
 
 // Hooks
-import useAxiosPublic from "../../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 const Login = () => {
   const axiosPublic = useAxiosPublic();

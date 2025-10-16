@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 // Packages
 import Swal from "sweetalert2";
+import NavTitle from "./NavTitle/NavTitle";
 
 const AdminNav = () => {
   // Hooks
@@ -60,9 +61,7 @@ const AdminNav = () => {
   return (
     <nav className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 shadow-md px-5 md:px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-1 md:gap-3 text-center md:text-left relative">
       {/* Left: Title */}
-      <div className="text-white text-md md:text-2xl font-bold">
-        Naziur Rojman Banking Website
-      </div>
+      <NavTitle />
 
       {/* Center: Role/Info */}
       <div className="text-white font-medium text-center text-sm md:text-xl">
