@@ -25,6 +25,7 @@ import AdminLayout from "./Layout/AdminLayout";
 import AllUsers from "./Pages/Admin/AllUsers/AllUsers";
 import AllNominees from "./Pages/Admin/AllNominees/AllNominees";
 import LoanManagement from "./Pages/Admin/LoanManagement/LoanManagement";
+import NotFound from "./Pages/NotFound/NotFound";
 
 // React Query
 const queryClient = new QueryClient();
@@ -34,6 +35,8 @@ createRoot(document.getElementById("root")).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
+          <Route path="*" element={<NotFound />} />
+
           {/* Default Route */}
           <Route path="/" element={<Navigate to="/Login" />} />
 
