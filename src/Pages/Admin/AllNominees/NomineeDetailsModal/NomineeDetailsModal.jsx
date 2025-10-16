@@ -50,60 +50,108 @@ const NomineeDetailsModal = ({ selectedUser, setSelectedUser }) => {
       <div className="p-[1px] bg-purple-600 mb-4" />
 
       {/* Basic Info */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-        <p>
-          <strong>Name:</strong> {nominee_name}
-        </p>
-        <p>
-          <strong>Phone:</strong> {nominee_phone}
-        </p>
-        <p>
-          <strong>Relation:</strong> {relation}
-        </p>
-        <p>
-          <strong>NID:</strong> {nominee_nid}
-        </p>
-        <p>
-          <strong>User Phone:</strong> {user_phone}
-        </p>
-        <p>
-          <strong>Submitted At:</strong>{" "}
-          {new Date(submitted_at).toLocaleString()}
-        </p>
-        <p>
-          <strong>Created At:</strong> {new Date(created_at).toLocaleString()}
-        </p>
-        <p>
-          <strong>Updated At:</strong> {new Date(updated_at).toLocaleString()}
-        </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+          <p className="text-sm text-gray-600">
+            <strong>Nominee Name:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">
+            {nominee_name}
+          </p>
+        </div>
+
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+          <p className="text-sm text-gray-600">
+            <strong>Phone:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">
+            {nominee_phone}
+          </p>
+        </div>
+
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+          <p className="text-sm text-gray-600">
+            <strong>Relation:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">{relation}</p>
+        </div>
+
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+          <p className="text-sm text-gray-600">
+            <strong>NID:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">{nominee_nid}</p>
+        </div>
+
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+          <p className="text-sm text-gray-600">
+            <strong>User Phone:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">{user_phone}</p>
+        </div>
+
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+          <p className="text-sm text-gray-600">
+            <strong>Submitted At:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">
+            {new Date(submitted_at).toLocaleString()}
+          </p>
+        </div>
+
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+          <p className="text-sm text-gray-600">
+            <strong>Created At:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">
+            {new Date(created_at).toLocaleString()}
+          </p>
+        </div>
+
+        <div className="bg-gray-50 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 sm:col-span-2 md:col-span-1">
+          <p className="text-sm text-gray-600">
+            <strong>Updated At:</strong>
+          </p>
+          <p className="text-base font-semibold text-gray-800">
+            {new Date(updated_at).toLocaleString()}
+          </p>
+        </div>
       </div>
 
       {/* Documents */}
       <div className="mb-4">
+        {/* Title */}
         <h4 className="font-semibold text-purple-700 mb-3">Documents</h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        {/* Images */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+          {/* Passport Photo */}
           <div className="flex flex-col items-center">
             <p className="text-sm font-medium mb-1">Passport Photo</p>
             <img
               src={nominee_passport_photo}
               alt="Passport"
-              className="w-full h-[200px] object-cover rounded-lg border shadow"
+              className="w-full h-48 sm:h-56 md:h-52 object-cover rounded-lg border shadow"
             />
           </div>
+
+          {/* NID Front */}
           <div className="flex flex-col items-center">
             <p className="text-sm font-medium mb-1">NID Front</p>
             <img
               src={nominee_nid_front}
               alt="NID Front"
-              className="w-full h-[200px] object-cover rounded-lg border shadow"
+              className="w-full h-48 sm:h-56 md:h-52 object-cover rounded-lg border shadow"
             />
           </div>
-          <div className="flex flex-col col-span-2 items-center w-1/2 mx-auto">
+
+          {/* NID Back */}
+          <div className="flex flex-col items-center sm:col-span-2 md:col-span-1">
             <p className="text-sm font-medium mb-1">NID Back</p>
             <img
               src={nominee_nid_back}
               alt="NID Back"
-              className="w-full h-[200px] object-cover rounded-lg border shadow"
+              className="w-full h-48 sm:h-56 md:h-52 object-cover rounded-lg border shadow"
             />
           </div>
         </div>

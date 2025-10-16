@@ -82,7 +82,7 @@ const LoanManagement = () => {
   // Centered Loading
   if (isLoading)
     return (
-      <div className="flex flex-col justify-center items-center w-full">
+      <div className="fixed inset-0 flex flex-col justify-center items-center bg-white/80 z-50">
         <div className="animate-spin rounded-full h-14 w-14 border-t-4 border-b-4 border-purple-600 mb-4"></div>
         <span className="text-purple-700 font-semibold text-lg">
           Loading, please wait...
@@ -93,8 +93,8 @@ const LoanManagement = () => {
   // Centered Error
   if (error)
     return (
-      <div className="flex flex-col justify-center items-center bg-red-50 text-center border-t border-red-200 w-full">
-        <BiSolidErrorAlt className="text-red-500 text-8xl" />
+      <div className="fixed inset-0 flex flex-col justify-center items-center bg-red-50 text-center border-t border-red-200 z-50">
+        <BiSolidErrorAlt className="text-red-500 text-8xl mb-3" />
         <p className="text-red-600 font-bold text-xl mb-2">
           Oops! Something went wrong.
         </p>
@@ -110,8 +110,9 @@ const LoanManagement = () => {
   const filteredFullPaid = applyFilters(fullPaidLoans);
 
   return (
-    <div className="p-6 text-black w-full">
-      <h1 className="text-purple-600 text-2xl font-bold text-center pb-5">
+    <div className="p-1 md:p-6 text-black w-full">
+      {/* Title */}
+      <h1 className="text-purple-600 text-2xl font-bold text-center pt-3 md:pt-0 pb-5">
         All Loans
       </h1>
 
@@ -123,7 +124,7 @@ const LoanManagement = () => {
           <input
             type="text"
             placeholder="Enter user name"
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600  bg-white"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -133,7 +134,7 @@ const LoanManagement = () => {
         <div>
           <label className="block font-semibold mb-1">Loan Type</label>
           <select
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600  bg-white"
             value={selectedLoanType}
             onChange={(e) => setSelectedLoanType(e.target.value)}
           >
@@ -150,7 +151,7 @@ const LoanManagement = () => {
         <div>
           <label className="block font-semibold mb-1">Loan Duration</label>
           <select
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 bg-white"
             value={selectedDuration}
             onChange={(e) => setSelectedDuration(e.target.value)}
           >
@@ -167,7 +168,7 @@ const LoanManagement = () => {
         <div>
           <label className="block font-semibold mb-1">Repayment Method</label>
           <select
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 bg-white"
             value={selectedRepayment}
             onChange={(e) => setSelectedRepayment(e.target.value)}
           >
@@ -181,11 +182,11 @@ const LoanManagement = () => {
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex space-x-3 bg-gray-100 p-2 rounded-xl shadow-inner mb-6">
-        {/* Pending Button */}
+   {/* Tabs */}
+      <div className="grid grid-cols-2 sm:flex sm:space-x-3 bg-gray-100 p-2 sm:p-3 rounded-xl shadow-inner mb-6 gap-2 sm:gap-0">
+        {/* Pending */}
         <button
-          className={`flex-1 py-2 font-semibold rounded-lg transition-all duration-200 text-center cursor-pointer ${
+          className={`w-full py-2 sm:py-2.5 font-semibold rounded-lg transition-all duration-200 text-center cursor-pointer text-sm sm:text-base ${
             activeTab === "pending"
               ? "bg-purple-600 text-white shadow-md"
               : "bg-white text-gray-700 hover:bg-purple-50 hover:text-purple-600"
@@ -195,21 +196,9 @@ const LoanManagement = () => {
           Pending
         </button>
 
-        {/* Rejected / Accepted Button */}
+        {/* Full Paid */}
         <button
-          className={`flex-1 py-2 font-semibold rounded-lg transition-all duration-200 text-center cursor-pointer ${
-            activeTab === "rejectedAccepted"
-              ? "bg-purple-600 text-white shadow-md"
-              : "bg-white text-gray-700 hover:bg-purple-50 hover:text-purple-600"
-          }`}
-          onClick={() => setActiveTab("rejectedAccepted")}
-        >
-          Rejected / Accepted
-        </button>
-
-        {/* Full Paid Button */}
-        <button
-          className={`flex-1 py-2 font-semibold rounded-lg transition-all duration-200 text-center cursor-pointer ${
+          className={`w-full py-2 sm:py-2.5 font-semibold rounded-lg transition-all duration-200 text-center cursor-pointer text-sm sm:text-base ${
             activeTab === "fullPaid"
               ? "bg-purple-600 text-white shadow-md"
               : "bg-white text-gray-700 hover:bg-purple-50 hover:text-purple-600"
@@ -217,6 +206,18 @@ const LoanManagement = () => {
           onClick={() => setActiveTab("fullPaid")}
         >
           Full Paid
+        </button>
+
+        {/* Rejected / Accepted */}
+        <button
+          className={`col-span-2 sm:col-span-1 w-full py-2 sm:py-2.5 font-semibold rounded-lg transition-all duration-200 text-center cursor-pointer text-sm sm:text-base ${
+            activeTab === "rejectedAccepted"
+              ? "bg-purple-600 text-white shadow-md"
+              : "bg-white text-gray-700 hover:bg-purple-50 hover:text-purple-600"
+          }`}
+          onClick={() => setActiveTab("rejectedAccepted")}
+        >
+          Rejected / Accepted
         </button>
       </div>
 
