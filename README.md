@@ -170,7 +170,7 @@ Server should keep secrets out of public repos and use environment variables for
 
 ## Deployment
 
-- **Client:** [https://sass-micro-finance.web.app/](https://sass-micro-finance.web.app/)
+- **Client:** [https://sass-micro-finance.web.app/](https://sass-micro-finance-a9eeb.web.app/)
 - **Server:** [https://naziur-rahman-server.vercel.app/](https://naziur-rahman-server.vercel.app/)
 
 > ⚠️ **Reminder:** This deployment is for demo/educational purposes only. The app contains low security measures and should **not** be used with real personal or financial data. I am **not liable** for any misuse.
